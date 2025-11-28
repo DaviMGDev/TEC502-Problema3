@@ -23,26 +23,3 @@ func NewChatService(
 	}
 }
 
-func (s *ChatService) SendMessage(roomID string, message domain.Message) error {
-	// Check if room exists
-	_, err := s.roomRepo.Read(roomID)
-	if err != nil {
-		return err
-	}
-
-	// Store the message
-	return s.messageRepo.Create(message.Timestamp.String(), message)
-}
-
-func (s *ChatService) GetMessages() ([]domain.Message, error) {
-	return s.messageRepo.List()
-}
-
-func (s *ChatService) ListRooms() ([]domain.Room, error) {
-	return s.roomRepo.List()
-}
-
-func (s *ChatService) ListUsers() ([]domain.User, error) {
-	return s.userRepo.List()
-}
-

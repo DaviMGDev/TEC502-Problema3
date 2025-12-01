@@ -1,20 +1,17 @@
-package domain
+package domain 
 
-import (
-	"time"
-)
-
-type MessageType string 
+type MessageType uint8 
 
 const (
-	MessageTypeChat    MessageType = "chat"
-	MessageTypeCommand MessageType = "command"
+	ChatMessage MessageType = iota 
+	ServerNotification 
+	GameEvent
+	SystemAlert
 )
 
 type Message struct {
-	Timestamp time.Time `json:"timestamp"`
-	SenderID  string    `json:"sender_id"`
-	RoomID    string 	  `json:"room_id"`
-	Content   string    `json:"content"`
-	Type      MessageType `json:"type"`
+	ID      string      `json:"id"`
+	Type    MessageType `json:"type"`
+	Content string      `json:"content"`
+	Sender  string      `json:"sender"`
 }

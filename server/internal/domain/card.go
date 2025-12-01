@@ -1,13 +1,15 @@
 package domain
 
+type CardType uint8 
+
 const (
-	ROCK uint8 = iota 
-	PAPER
-	SCISSORS
+	Rock CardType = iota 
+	Paper 
+	Scissors
 )
 
 type Card struct {
-	ID 		string `json:"id"`
-	Type 	uint8 `json:"type"`
-	Level uint8 `json:"level"`
+	ID   string   `json:"id"`
+	Type CardType `json:"type"`
+	Level uint8    `json:"level"`
 }

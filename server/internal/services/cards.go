@@ -2,18 +2,14 @@ package services
 
 import (
 	"cod-server/internal/domain"
-	"cod-server/internal/data"
 )
 
-type CardServiceInterface interface {
+type CardService interface {
 	AddCard(userID string, card domain.Card) (error)
 	GetCards(userID string) ([]domain.Card, error)
-	RemoveCard(userID, cardID string) (error)
-	ExchangeCards(userOneID, cardOneID, userTwoID, cardTwoID string) (error)
-	LevelUpCard(userID, cardID string) (error)
+	RemoveCard(userID string, cardType domain.CardType) (error)
+	ExchangeCards(userOneID, userTwoID string, cardType domain.CardType) (error)
+	LevelUpCard(userID string, cardType domain.CardType) (error)
 }
 
-type CardService struct {
-	userRepo data.Repository[domain.User]
-}
 

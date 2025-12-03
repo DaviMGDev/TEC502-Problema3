@@ -1,6 +1,8 @@
 package domain
 
+import "cod-server/internal/utils"
+
 type Room struct {
 	ID      string   `json:"id"` 
-	Members []string `json:"members"`
+	Members  utils.List[string] `json:"members"`
 }

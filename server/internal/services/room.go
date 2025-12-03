@@ -1,20 +1,17 @@
 package services
 
 import (
-	"cod-server/internal/domain"
-	"cod-server/internal/data"
 )
 
-type RoomServiceInterface interface {
-	CreateRoom(hostID string) (domain.Room, error)
+var (
+//	roomCounter uint
+)
+
+type RoomService interface {
+	CreateRoom(hostID string) (string, error)
 	JoinRoom(roomID, userID string) error
 	LeaveRoom(roomID, userID string) error
-	GetRoomInfo(roomID string) (domain.Room, error)
 	KickUser(roomID, hostID, userID string) error 
-	SearchForRoom(userID string) (domain.Room, error)
+	SearchForRoom(userID string) (string, error)
 }
 
-type RoomService struct {
-	roomRepo data.Repository[domain.Room]
-	userRepo data.Repository[domain.User]
-}

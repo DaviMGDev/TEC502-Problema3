@@ -1,6 +1,10 @@
 package domain
 
+import "cod-server/internal/utils"
+
 type Package struct {
 	ID    string   `json:"id"`
-	Cards []*Card `json:"cards"`
+	Cards utils.Map[string, *Card] `json:"cards"`
 }
+
+

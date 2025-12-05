@@ -1,0 +1,80 @@
+/help
+"
+help - Show this help message
+register user password - Register a new user
+login user password - Log in as an existing user
+...
+"
+
+/register user password 
+"
+user registered successfully
+or 
+user already exists
+or
+invalid username or password format
+"
+/login user password 
+"
+user logged in successfully
+or
+invalid username or password
+or
+user already logged in 
+or
+another user is already logged in 
+"
+
+/logout 
+"
+user logged out successfully
+or
+no user is logged in 
+"
+
+/list
+"
+rock(a stars)
+paper(b stars)
+scissors(c stars)
+"
+
+/buy 
+"
+package purchased successfully: rock(x), paper(y), scissors(z)
+your new deck:
+rock(max(a, x) stars)
+paper(max(b, y) stars)
+scissors(max(c, z) stars)
+"
+
+/exchange card // rock, paper, or scissors
+"
+exchange request sent successfully
+or
+you need to be in a room to exchange cards
+or 
+you need to be logged in to exchange cards
+or
+invalid card type
+"
+
+/start 
+"
+room and match started. waiting for opponent...
+or
+you need to be logged in to start a match
+or
+you are already in a room
+"
+
+/start private 
+"
+private room created. room id: <room_id>
+or
+you need to be logged in to start a private match 
+or
+you are already in a room 
+"
+
+/

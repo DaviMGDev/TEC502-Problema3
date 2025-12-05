@@ -1,0 +1,87 @@
+/command -> json
+message <- json
+"[message]"
+
+/help -> ""
+"
+list of commands:
+" <- {}
+/clear -> ""
+"" <- {}
+/exit -> ""
+"" <- {}
+
+/message content -> {
+  "method": "message",
+  "content": content,
+  "timestamp": "YYYY-MM-DDTHH:MM:SSZ"
+  "status": "sent"
+  "sender": $username
+  "room_id": $room_id
+}
+"" <- {
+  "method": "message",
+  "status": "success",
+  "data": {}
+}
+
+/register username password -> {
+  "method": "register",
+  "username": username,
+  "password": password
+}
+"user registered" <- {
+  "method": "register",
+  "status": "success",
+  "data": {}
+}
+
+/login username password -> {
+  "method": "login",
+  "username": username,
+  "password": password
+}
+"user logged in" <- {
+  "method": "login",
+  "status": "success",
+  "data": {
+    "id": $user_id,
+  }
+}
+
+/logout -> ""
+"user logged out" <- {}
+
+/list -> {
+  "method": "list",
+  "user_id": $user_id
+}
+"[card_list_of_user]" <- {
+  "method": "list",
+  "status": "success",
+  "data": {
+    "cards": [...]
+  }
+}
+
+/buy -> {
+  "method": "buy",
+  "user_id": $user_id,
+}
+"new deck: [card_list]" <- {
+  "method": "buy",
+  "status": "success",
+  "data": {
+    "cards": [...]
+  }
+}
+
+/start -> {
+  "method": "start",
+  "user_id": $user_id,
+}
+"game started" <- {
+  "method": "start",
+  "status": "success",
+  "data": {}
+}

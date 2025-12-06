@@ -1,9 +1,10 @@
-package  ui 
+package ui
 
 import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 )
 
 type Chat struct {
@@ -41,4 +42,10 @@ func (chat *Chat) Start(fn func()) {
 	go chat.WriteLoop()
 	go chat.ReadLoop()
 	go fn()
+}
+
+func (chat *Chat) Clear() {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }

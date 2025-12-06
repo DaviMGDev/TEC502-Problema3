@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-type Dict map[any]any 
+type Dict map[string]any 
 
 func (dict Dict) String() string {
 	data, _ := json.MarshalIndent(dict, "", "  ")
@@ -15,3 +15,4 @@ func (dict Dict) Json() []byte {
 	data, _ := json.MarshalIndent(dict, "", "  ")
 	return data
 }
+

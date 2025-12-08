@@ -9,13 +9,11 @@ import (
 type State struct {
 	Address string 
 	BrokerAddress string 
-	IsLeader bool 
 }
 
 func NewState() *State {
 	return &State{
 		Address:      "",
 		BrokerAddress: "",
-		IsLeader:     false,
 	}
 }

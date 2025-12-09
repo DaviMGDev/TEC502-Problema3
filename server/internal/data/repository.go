@@ -24,6 +24,9 @@ func NewInMemoryRepository[T any]() *InMemoryRepository[T] {
 }
 
 func (repo *InMemoryRepository[T]) Create(id string, entity T) error {
+	if _, exists := repo.entities.Get(id); exists {
+		return errors.New("entity with this ID already exists")
+	}
 	repo.entities.Set(id, entity)
 	return nil
 }

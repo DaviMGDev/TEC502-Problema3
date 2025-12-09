@@ -1,11 +1,13 @@
-# Projeto do Servidor do Jogo de Cartas
+# Servidor do Jogo "Cards of Destiny"
+
+Este projeto é o backend para "Cards of Destiny", um jogo de cartas colecionáveis multiplayer. O servidor é construído em Go e utiliza uma arquitetura em camadas orientada a eventos. O estado atual do projeto é de um esqueleto funcional: a lógica de negócio principal está implementada e testada, mas a camada de comunicação (handlers) e o ponto de entrada da aplicação ainda estão pendentes.
 
 ## 1. Estrutura do Projeto
 
 A seguinte estrutura de diretórios organiza os componentes do servidor:
 
 ```
-/home/davi/Distrobox/arch-box/davi/tmp/TEC502-Problema3/server/
+/
 ├───go.mod
 ├───go.sum
 ├───cmd/
@@ -37,7 +39,7 @@ A seguinte estrutura de diretórios organiza os componentes do servidor:
     └───utils/
         ├───dict.go
         ├───list.go
-        ├───map.go
+        └───map.go
         └───mux.go
         └───parser.go
 ```
@@ -101,55 +103,66 @@ O sistema segue uma arquitetura baseada em camadas e orientada a eventos. Um eve
 +-----------------------------+
 ```
 
-Nota:
-- `protocol.Event` é o formato de mensagem padrão.
-- `utils.SafeMap`, `utils.SafeList`, `utils.Mux` são usados por várias camadas para concorrência e despacho.
-- `state.State` é usado pelo `Orchestrator` para aceder a estado e configuração globais (ex: endereço do broker MQTT).
+## 3. Estado do Projeto e Próximos Passos
 
-## 3. Checklist de TODOs
+### Itens Concluídos (Recentemente)
+*   `[x]` Implementada toda a lógica de negócio na camada de Serviços (`UserService`, `CardService`, `GameService`).
+*   `[x]` Implementado sistema de fila (matchmaking) no `GameService`.
+*   `[x]` Adicionados testes unitários e de integração para toda a camada de `Services`, que estão passando.
+*   `[x]` Refatorados os testes de serviço para usar `InMemoryRepository` em vez de mocks manuais.
+*   `[x]` Criados arquivos de teste placeholder para todos os pacotes do projeto.
+*   `[x]` Refatorados os testes dos `Handlers` para seguir a filosofia TDD corretamente e falhar de forma explícita.
+*   `[x]` Corrigido bug no repositório que permitia a criação de usuários duplicados.
 
-Esta secção lista as funcionalidades incompletas, bugs e lacunas arquitetónicas identificadas durante a análise do projeto. Estas são tarefas cruciais para tornar a aplicação funcional e robusta.
+### Próximos Passos para o MVP (Prioridade Alta)
+*   `[ ]` **Implementar a Lógica dos Handlers:** Implementar a lógica em `internal/handlers/generic_handlers.go` para fazer os testes TDD passarem.
+*   `[ ]` **Corrigir Bug Crítico da API:** Implementar a função `InferEventTopic` em `internal/api/codmqtt/handlers.go` para permitir o envio de respostas MQTT.
+*   `[ ]` **Implementar Ponto de Entrada:** Escrever o código em `cmd/main.go` para instanciar e conectar todos os componentes e iniciar o servidor.
 
--   [ ] **CRÍTICO: Criar o ponto de entrada da aplicação (`func main`) em `cmd/main.go`**: Atualmente, o ficheiro `main.go` está vazio, tornando a aplicação não executável. Esta é a tarefa de maior prioridade.
--   [ ] **Implementar a lógica dos manipuladores de eventos em `internal/handlers/generic_handlers.go`**: Os métodos da `HandlersImplementation` estão definidos na interface, mas a sua lógica para extrair dados do `protocol.Event` recebido e chamar os serviços correspondentes está ausente.
--   [ ] **Implementar a lógica de jogo em `internal/services/game.go`**: As funções principais do `GameService` (`StartGame`, `MakeMove`, `GetGameState`, `PLayerSurrender`) estão vazias ou comentadas. Esta é uma funcionalidade central do jogo que precisa ser desenvolvida para que o jogo possa ser jogado.
--   [ ] **Implementar o Nível da Carta como critério de desempate**: Na lógica de combate (`domain.Card.Against`), em caso de empate (ex: Pedra vs. Pedra), o `Level` da carta deve ser usado para determinar o vencedor. A carta de maior nível vence. Esta lógica precisa ser adicionada.
--   [ ] **Refinar a lógica de `MakeMove` para resolver a partida**: O método `MakeMove` no `GameService` deve ser implementado para: 1. Guardar a jogada do jogador. 2. Verificar se o oponente também já jogou. 3. Se sim, invocar um método interno para comparar as duas jogadas, determinar o vencedor e finalizar a partida.
--   [ ] **Corrigir o bug em `internal/api/codmqtt/handlers.go` na função `InferEventTopic`**: Atualmente, esta função retorna sempre `"unknown"`, o que impede que as respostas do servidor sejam publicadas nos tópicos MQTT corretos para os clientes. É necessário implementar a lógica para inferir o tópico de resposta adequado com base no método do evento original.
--   [ ] **Adicionar persistência de dados real**: A implementação atual (`data.InMemoryRepository`) armazena os dados apenas em memória RAM. Todos os dados são perdidos ao reiniciar o servidor. É necessário integrar uma solução de persistência (ex: banco de dados SQL como PostgreSQL, ou NoSQL como MongoDB/Redis) para garantir que os dados dos utilizadores e do jogo sejam guardados permanentemente.
--   [ ] **Desenvolver a API REST em `internal/api/rest`**: O diretório `internal/api/rest` está vazio, indicando que uma API REST foi planeada, mas nunca implementada. Se desejado, esta API deve ser desenvolvida para oferecer uma alternativa ou complemento à interface MQTT.
--   [ ] **Melhorar a geração de IDs**: Atualmente, a geração de IDs utiliza contadores simples que podem não ser robustos o suficiente em um ambiente distribuído ou para evitar colisões. Considerar o uso de UUIDs (Universally Unique Identifiers) para garantir unicidade e escalabilidade.
+### Melhorias Futuras (Pós-MVP)
+*   `[ ]` Adicionar persistência de dados com um banco de dados real (ex: PostgreSQL).
+*   `[ ]` Desenvolver a API REST planejada em `internal/api/rest`.
+*   `[ ]` Escrever testes funcionais para os pacotes com placeholders (`gateway`, `codmqtt`, etc.).
+*   `[ ]` Melhorar a geração de IDs (ex: usando UUIDs).
 
-## 4. Como Executar
+## 4. Documentação de Arquitetura e API
 
-Para compilar e executar o servidor, os seguintes passos seriam necessários APÓS a implementação das partes em falta (nomeadamente o `main.go` e a lógica dos `handlers`):
+*   **`details.md`**: Contém uma análise detalhada e incremental de cada pacote do projeto.
+*   **`events.md`**: Descreve o contrato da API, com a especificação JSON para cada evento de requisição e resposta.
+*   **`game.md`**: Explica as regras e o fluxo do jogo "Cards of Destiny".
+*   **`tests.md`**: Descreve a metodologia e a filosofia de testes adotadas no projeto.
 
-1.  **Pré-requisitos**:
-    *   Ter o Go instalado (versão 1.25.4 ou superior, conforme `go.mod`).
-    *   Um broker MQTT acessível (ex: Mosquitto) para comunicação.
+## 5. Como Executar e Testar
 
-2.  **Compilação**:
-    ```bash
-    go build -o server ./cmd
-    ```
+### 5.1. Pré-requisitos
 
-3.  **Execução**:
-    ```bash
-    ./server
-    ```
-    (Ou `go run ./cmd` para executar diretamente sem compilação prévia)
+*   Go (versão definida em `go.mod`).
+*   Um broker MQTT acessível (ex: Mosquitto) para comunicação, quando o `main.go` for implementado.
 
-## 5. Dependências
+### 5.2. Execução de Testes
 
-As dependências do projeto são geridas pelo `go modules`.
+A ferramenta de teste padrão do Go é o `go test`. Para ter uma visão completa do estado do projeto, execute o seguinte comando na raiz:
 
-### Dependências Diretas:
+```bash
+# Executa todos os testes em todos os pacotes
+go test -v ./...
+```
 
-*   `github.com/eclipse/paho.mqtt.golang v1.5.1` (Cliente MQTT para comunicação)
+Isso irá mostrar:
+*   **PASS** para os pacotes `domain`, `utils`, `data` e `services`.
+*   **FAIL** para `handlers` (pois os testes TDD esperam uma implementação que ainda não existe).
+*   **FAIL** para `gateway`, `api/*` e `state` (pois os testes são placeholders que precisam ser implementados).
 
-### Dependências Indiretas:
+### 5.3. Compilação e Execução do Servidor
 
-*   `github.com/gorilla/websocket v1.5.3` (Provavelmente para uma futura implementação REST/WebSocket)
-*   `golang.org/x/net v0.44.0`
-*   `golang.org/x/sync v0.17.0`
+**Nota:** O servidor não é executável até que o **Passo 3.1** do plano do MVP seja concluído.
 
+```bash
+# Após implementar cmd/main.go
+go build -o server ./cmd
+./server
+```
+
+## 6. Dependências
+
+As dependências do projeto são geridas pelo `go modules` e podem ser encontradas no arquivo `go.mod`.

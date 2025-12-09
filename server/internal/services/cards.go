@@ -21,9 +21,12 @@ type CardServiceImplementation struct {
 }
 
 func NewCardService(userRepo data.Repository[*domain.User]) *CardServiceImplementation {
-	return &CardServiceImplementation{
+	service := &CardServiceImplementation{
 		userRepo: userRepo,
+		packages: utils.NewSafeList[*domain.Package](),
 	}
+	service.checkStock()
+	return service
 }
 
 func (s *CardServiceImplementation) checkStock() {

@@ -8,13 +8,14 @@ type Map[K comparable, V any] interface {
 	Get(key K) (V, bool)
 	Set(key K, value V)
 	Delete(key K)
-	Has(key K) bool 
+	Has(key K) bool
 	Keys() []K
 	Values() []V
+	Size() int
 }
 
 type SafeMap[K comparable, V any] struct {
-	data map[K]V
+	data  map[K]V
 	mutex sync.RWMutex
 }
 
@@ -64,7 +65,8 @@ func (m *SafeMap[K, V]) Keys() []K {
 		keys = append(keys, k)
 	}
 	return keys
-}	
+}
+
 func (m *SafeMap[K, V]) Values() []V {
 	m.mutex.RLock()
 	defer m.mutex.RUnlock()
@@ -73,4 +75,10 @@ func (m *SafeMap[K, V]) Values() []V {
 		values = append(values, v)
 	}
 	return values
+}
+
+func (m *SafeMap[K, V]) Size() int {
+	m.mutex.RLock()
+	defer m.mutex.RUnlock()
+	return len(m.data)
 }

@@ -262,3 +262,41 @@ A análise deste pacote resultou na descoberta mais crítica de todo o projeto.
 ### Conclusão Inicial:
 
 A aplicação não tem um ponto de entrada e, portanto, **não pode ser compilada ou executada**. Apesar de ter uma arquitetura interna bem definida e em camadas, falta a "cola" final que instancia e conecta todos os componentes (`data`, `services`, `handlers`, `gateway`, `api`). O projeto, no seu estado atual, é um esqueleto não funcional. É como ter o motor, o chassi e as rodas de um carro, mas sem nenhuma peça que os ligue.
+
+## 10. API de Eventos (`events.md`)
+
+**Data da Análise:** 2025-12-08
+
+**Ficheiros Analisados:** `events.md`
+
+### Resumo
+
+O arquivo `events.md` define o contrato da API para a comunicação baseada em eventos via MQTT. Ele especifica a estrutura exata dos payloads JSON para cada tipo de requisição e resposta, garantindo a interoperabilidade entre cliente e servidor.
+
+### Estrutura Geral
+
+*   **Requisições (Requests):** Enviadas para tópicos como `{feature}/{method}/requests`.
+    *   `method`: `string` - O nome da ação a ser executada.
+    *   `timestamp`: `string` - Data/hora do evento.
+    *   `payload`: `object` - Um dicionário contendo os dados da requisição.
+
+*   **Respostas (Responses):** Publicadas em tópicos de resposta.
+    *   `method`: `string` - O método da requisição original.
+    *   `timestamp`: `string` - Data/hora da resposta.
+    *   `status`: `string` - `"success"` ou `"error"`.
+    *   `payload`: `object` - Contém uma `status_message` e outros dados de resposta.
+
+### Payloads de Requisição Detalhados
+
+*   `register`: `{ "username": "<string>", "password": "<string>" }`
+*   `login`: `{ "username": "<string>", "password": "<string>" }`
+*   `start_game`: `{ "user_id": "<string>" }`
+*   `play`: `{ "user_id": "<string>", "move": "<string>", "match_id": "<string>" }`
+*   `surrender`: `{ "user_id": "<string>", "match_id": "<string>" }`
+*   `list_cards`: `{ "user_id": "<string>" }`
+*   `buy_pack`: `{ "user_id": "<string>" }`
+*   `trade`: `{ "trader_id": "<string>", "card_type": "<string>", "username": "<string>" }`
+
+### Conclusão
+
+A especificação em `events.md` é a "fonte da verdade" para a camada de `handlers`. A lógica dos handlers deve validar os payloads de entrada contra esta especificação e formatar as respostas de acordo. Qualquer divergência entre o código e este arquivo deve ser corrigida, tratando o `events.md` como o contrato a ser seguido.

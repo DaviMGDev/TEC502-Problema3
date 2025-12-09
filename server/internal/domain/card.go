@@ -14,7 +14,13 @@ type Card struct {
 
 func (card *Card) Against(opponent *Card) int {
 	if card.Type == opponent.Type {
-		return 0 
+		// Tie-breaking by Level
+		if card.Level > opponent.Level {
+			return 1 // card wins by level
+		} else if card.Level < opponent.Level {
+			return -1 // card loses by level
+		}
+		return 0 // Draw (same type, same level)
 	}
 	if (card.Type == Rock && opponent.Type == Scissors) ||
 		(card.Type == Paper && opponent.Type == Rock) ||

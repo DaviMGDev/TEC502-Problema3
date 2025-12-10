@@ -23,8 +23,8 @@ func (orch *Orchestrator) OnBuyCardPackEvent(event protocol.Event) protocol.Even
 	return orch.Handlers.OnBuyCardPackEvent(event)
 }
 
-func (orch *Orchestrator) OnSwapCardEvent(event protocol.Event) protocol.Event {
-	return orch.Handlers.OnSwapCardEvent(event)
+func (orch *Orchestrator) OnTradeEvent(event protocol.Event) protocol.Event {
+	return orch.Handlers.OnTradeEvent(event)
 }
 
 func (orch *Orchestrator) OnListUserCardsEvent(event protocol.Event) protocol.Event {

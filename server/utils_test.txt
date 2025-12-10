@@ -1,0 +1,114 @@
+=== RUN   TestParseCommand
+=== RUN   TestParseCommand/Empty_string
+2025/12/08 12:51:36 Running TestParseCommand: Empty string
+2025/12/08 12:51:36 TestParseCommand 'Empty string' passed.
+=== RUN   TestParseCommand/Chat_message
+2025/12/08 12:51:36 Running TestParseCommand: Chat message
+2025/12/08 12:51:36 TestParseCommand 'Chat message' passed.
+=== RUN   TestParseCommand/Simple_command
+2025/12/08 12:51:36 Running TestParseCommand: Simple command
+2025/12/08 12:51:36 TestParseCommand 'Simple command' passed.
+=== RUN   TestParseCommand/Command_with_multiple_args
+2025/12/08 12:51:36 Running TestParseCommand: Command with multiple args
+2025/12/08 12:51:36 TestParseCommand 'Command with multiple args' passed.
+=== RUN   TestParseCommand/Command_with_no_args
+2025/12/08 12:51:36 Running TestParseCommand: Command with no args
+2025/12/08 12:51:36 TestParseCommand 'Command with no args' passed.
+=== RUN   TestParseCommand/Command_with_mixed_case
+2025/12/08 12:51:36 Running TestParseCommand: Command with mixed case
+2025/12/08 12:51:36 TestParseCommand 'Command with mixed case' passed.
+=== RUN   TestParseCommand/Command_with_leading/trailing_spaces
+2025/12/08 12:51:36 Running TestParseCommand: Command with leading/trailing spaces
+2025/12/08 12:51:36 TestParseCommand 'Command with leading/trailing spaces' passed.
+--- PASS: TestParseCommand (0.00s)
+    --- PASS: TestParseCommand/Empty_string (0.00s)
+    --- PASS: TestParseCommand/Chat_message (0.00s)
+    --- PASS: TestParseCommand/Simple_command (0.00s)
+    --- PASS: TestParseCommand/Command_with_multiple_args (0.00s)
+    --- PASS: TestParseCommand/Command_with_no_args (0.00s)
+    --- PASS: TestParseCommand/Command_with_mixed_case (0.00s)
+    --- PASS: TestParseCommand/Command_with_leading/trailing_spaces (0.00s)
+=== RUN   TestSafeMap
+=== RUN   TestSafeMap/Set_and_Get
+2025/12/08 12:51:36 Running TestSafeMap: Set and Get
+2025/12/08 12:51:36 TestSafeMap 'Set and Get' passed.
+=== RUN   TestSafeMap/Has
+2025/12/08 12:51:36 Running TestSafeMap: Has
+2025/12/08 12:51:36 TestSafeMap 'Has' passed.
+=== RUN   TestSafeMap/Delete
+2025/12/08 12:51:36 Running TestSafeMap: Delete
+2025/12/08 12:51:36 TestSafeMap 'Delete' passed.
+=== RUN   TestSafeMap/Concurrency
+2025/12/08 12:51:36 Running TestSafeMap: Concurrency
+2025/12/08 12:51:36 Final SafeMap size: 90000
+2025/12/08 12:51:36 TestSafeMap 'Concurrency' passed.
+=== RUN   TestSafeMap/NewSafeMapFromMap
+2025/12/08 12:51:36 Running TestSafeMap: NewSafeMapFromMap
+2025/12/08 12:51:36 TestSafeMap 'NewSafeMapFromMap' passed.
+=== RUN   TestSafeMap/Keys_and_Values
+2025/12/08 12:51:36 Running TestSafeMap: Keys and Values
+2025/12/08 12:51:36 TestSafeMap 'Keys and Values' passed.
+--- PASS: TestSafeMap (0.08s)
+    --- PASS: TestSafeMap/Set_and_Get (0.00s)
+    --- PASS: TestSafeMap/Has (0.00s)
+    --- PASS: TestSafeMap/Delete (0.00s)
+    --- PASS: TestSafeMap/Concurrency (0.07s)
+    --- PASS: TestSafeMap/NewSafeMapFromMap (0.00s)
+    --- PASS: TestSafeMap/Keys_and_Values (0.00s)
+=== RUN   TestSafeList
+=== RUN   TestSafeList/Append
+2025/12/08 12:51:36 Running TestSafeList: Append
+2025/12/08 12:51:36 TestSafeList 'Append' passed.
+=== RUN   TestSafeList/Contains
+2025/12/08 12:51:36 Running TestSafeList: Contains
+2025/12/08 12:51:36 TestSafeList 'Contains' passed.
+=== RUN   TestSafeList/Remove
+2025/12/08 12:51:36 Running TestSafeList: Remove
+2025/12/08 12:51:36 TestSafeList 'Remove' passed.
+=== RUN   TestSafeList/Pop
+2025/12/08 12:51:36 Running TestSafeList: Pop
+2025/12/08 12:51:36 TestSafeList 'Pop' passed.
+=== RUN   TestSafeList/Get_out_of_bounds
+2025/12/08 12:51:36 Running TestSafeList: Get out of bounds
+2025/12/08 12:51:36 TestSafeList 'Get out of bounds' passed.
+=== RUN   TestSafeList/Search
+2025/12/08 12:51:36 Running TestSafeList: Search
+2025/12/08 12:51:36 TestSafeList 'Search' passed.
+=== RUN   TestSafeList/Concurrency
+2025/12/08 12:51:36 Running TestSafeList: Concurrency
+2025/12/08 12:51:37 Final SafeList size: 90000
+2025/12/08 12:51:37 TestSafeList 'Concurrency' passed.
+--- PASS: TestSafeList (0.71s)
+    --- PASS: TestSafeList/Append (0.00s)
+    --- PASS: TestSafeList/Contains (0.00s)
+    --- PASS: TestSafeList/Remove (0.00s)
+    --- PASS: TestSafeList/Pop (0.00s)
+    --- PASS: TestSafeList/Get_out_of_bounds (0.00s)
+    --- PASS: TestSafeList/Search (0.00s)
+    --- PASS: TestSafeList/Concurrency (0.71s)
+=== RUN   TestDict
+=== RUN   TestDict/Json_conversion
+2025/12/08 12:51:37 Running TestDict: Json conversion
+2025/12/08 12:51:37 TestDict 'Json conversion' passed.
+=== RUN   TestDict/String_conversion
+2025/12/08 12:51:37 Running TestDict: String conversion
+2025/12/08 12:51:37 TestDict 'String conversion' passed.
+--- PASS: TestDict (0.00s)
+    --- PASS: TestDict/Json_conversion (0.00s)
+    --- PASS: TestDict/String_conversion (0.00s)
+=== RUN   TestMux
+=== RUN   TestMux/Get_existing_handler
+2025/12/08 12:51:37 Running TestMux: Get existing handler
+2025/12/08 12:51:37 TestMux 'Get existing handler' passed.
+=== RUN   TestMux/Get_non-existing_handler
+2025/12/08 12:51:37 Running TestMux: Get non-existing handler
+2025/12/08 12:51:37 TestMux 'Get non-existing handler' passed.
+=== RUN   TestMux/Verify_default_function_behavior_when_no_specific_handler
+2025/12/08 12:51:37 Running TestMux: Verify default function behavior
+2025/12/08 12:51:37 TestMux 'Verify default function behavior' passed.
+--- PASS: TestMux (0.00s)
+    --- PASS: TestMux/Get_existing_handler (0.00s)
+    --- PASS: TestMux/Get_non-existing_handler (0.00s)
+    --- PASS: TestMux/Verify_default_function_behavior_when_no_specific_handler (0.00s)
+PASS
+ok  	cod-server/internal/utils	(cached)

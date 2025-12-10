@@ -1,13 +1,24 @@
-=== RUN   TestMqttHandler
-    handlers_test.go:6: Teste para MQTT Handler não implementado
---- FAIL: TestMqttHandler (0.00s)
-FAIL
-FAIL	cod-server/internal/api/codmqtt	0.010s
-=== RUN   TestEvent
-    event_test.go:6: Teste para Event não implementado
---- FAIL: TestEvent (0.00s)
-FAIL
-FAIL	cod-server/internal/api/protocol	0.006s
+?   	cod-server/cmd	[no test files]
+=== RUN   TestWrapCallsBusinessLogicAndPublishesResponse
+--- PASS: TestWrapCallsBusinessLogicAndPublishesResponse (0.00s)
+=== RUN   TestInferEventTopic
+=== RUN   TestInferEventTopic/Register_response_topic
+=== RUN   TestInferEventTopic/Login_response_topic
+=== RUN   TestInferEventTopic/Start_game_response_topic
+=== RUN   TestInferEventTopic/Play_response_topic
+=== RUN   TestInferEventTopic/Unknown_method_topic
+--- PASS: TestInferEventTopic (0.01s)
+    --- PASS: TestInferEventTopic/Register_response_topic (0.00s)
+    --- PASS: TestInferEventTopic/Login_response_topic (0.00s)
+    --- PASS: TestInferEventTopic/Start_game_response_topic (0.00s)
+    --- PASS: TestInferEventTopic/Play_response_topic (0.00s)
+    --- PASS: TestInferEventTopic/Unknown_method_topic (0.00s)
+PASS
+ok  	cod-server/internal/api/codmqtt	(cached)
+=== RUN   TestEventCreation
+--- PASS: TestEventCreation (0.00s)
+PASS
+ok  	cod-server/internal/api/protocol	(cached)
 === RUN   TestInMemoryRepository
 === RUN   TestInMemoryRepository/Create_User
 === RUN   TestInMemoryRepository/Read_User
@@ -86,194 +97,120 @@ ok  	cod-server/internal/data	(cached)
     --- PASS: TestCard_Against/Scissors_vs_Scissors_(Lower_Level_Loses) (0.00s)
 PASS
 ok  	cod-server/internal/domain	(cached)
-=== RUN   TestOrchestrator
-    orchestrator_test.go:6: Teste para Orchestrator não implementado
---- FAIL: TestOrchestrator (0.00s)
-FAIL
-FAIL	cod-server/internal/gateway	0.019s
+?   	cod-server/internal/gateway	[no test files]
+# cod-server/internal/services [cod-server/internal/services.test]
+internal/services/game_service_test.go:237:22: gameService.PLayerSurrender undefined (type *GameServiceImplementation has no field or method PLayerSurrender, but does have method PlayerSurrender)
+internal/services/game_service_test.go:250:22: gameService.PLayerSurrender undefined (type *GameServiceImplementation has no field or method PLayerSurrender, but does have method PlayerSurrender)
+internal/services/game_service_test.go:259:22: gameService.PLayerSurrender undefined (type *GameServiceImplementation has no field or method PLayerSurrender, but does have method PlayerSurrender)
 === RUN   TestOnRegisterEvent
 === RUN   TestOnRegisterEvent/calls_user_service_with_correct_params_and_returns_success
-2025/12/09 04:03:50 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[password:testpassword username:testuser]}
-    generic_handlers_test.go:135: Expected Register to be called, but it was not.
-    generic_handlers_test.go:138: Expected username 'testuser', got ''
-    generic_handlers_test.go:141: Expected password 'testpassword', got ''
-    generic_handlers_test.go:145: Expected response method 'register', got ''
-    generic_handlers_test.go:148: Expected status 'success', got '<nil>'
-    generic_handlers_test.go:152: Expected non-empty user_id in payload, got '<nil>'
-2025/12/09 04:03:50 TestOnRegisterEvent 'calls user service with correct params and returns success' completed (expected to fail).
+2025/12/09 23:35:45 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:testpassword username:testuser]}
+2025/12/09 23:35:45 TestOnRegisterEvent 'calls user service with correct params and returns success' completed (expected to fail).
 === RUN   TestOnRegisterEvent/returns_error_on_missing_payload_fields
-2025/12/09 04:03:50 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[username:testuser]}
-    generic_handlers_test.go:166: Expected response method 'error', got ''
-    generic_handlers_test.go:169: Expected an error message in payload, but got nil or empty
-2025/12/09 04:03:50 TestOnRegisterEvent 'returns error on missing payload fields' completed (expected to fail).
+2025/12/09 23:35:45 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 username:testuser]}
+2025/12/09 23:35:45 TestOnRegisterEvent 'returns error on missing payload fields' completed (expected to fail).
 === RUN   TestOnRegisterEvent/returns_error_on_service_failure
-2025/12/09 04:03:50 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[password:password username:erroruser]}
-    generic_handlers_test.go:184: Expected response method 'error', got ''
-    generic_handlers_test.go:187: Expected error message 'user service error', got '<nil>'
-2025/12/09 04:03:50 TestOnRegisterEvent 'returns error on service failure' completed (expected to fail).
---- FAIL: TestOnRegisterEvent (0.00s)
-    --- FAIL: TestOnRegisterEvent/calls_user_service_with_correct_params_and_returns_success (0.00s)
-    --- FAIL: TestOnRegisterEvent/returns_error_on_missing_payload_fields (0.00s)
-    --- FAIL: TestOnRegisterEvent/returns_error_on_service_failure (0.00s)
+2025/12/09 23:35:45 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:password username:erroruser]}
+2025/12/09 23:35:45 TestOnRegisterEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnRegisterEvent (0.00s)
+    --- PASS: TestOnRegisterEvent/calls_user_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnRegisterEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnRegisterEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnLoginEvent
+=== RUN   TestOnLoginEvent/Successful_Login_calls_service_with_correct_params_and_returns_success
+2025/12/09 23:35:45 Received OnLoginEvent: {Method:login Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:testpassword username:testuser]}
+2025/12/09 23:35:45 TestOnLoginEvent 'Successful Login' completed (expected to fail).
+=== RUN   TestOnLoginEvent/returns_error_on_missing_payload_fields
+2025/12/09 23:35:45 Received OnLoginEvent: {Method:login Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 username:testuser]}
+2025/12/09 23:35:45 TestOnLoginEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnLoginEvent/returns_error_on_service_failure
+2025/12/09 23:35:45 Received OnLoginEvent: {Method:login Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:password username:erroruser]}
+2025/12/09 23:35:45 TestOnLoginEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnLoginEvent (0.00s)
+    --- PASS: TestOnLoginEvent/Successful_Login_calls_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnLoginEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnLoginEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnBuyCardPackEvent
+=== RUN   TestOnBuyCardPackEvent/calls_card_service_with_correct_params_and_returns_success
+2025/12/09 23:35:45 Received OnBuyCardPackEvent: {Method:buy_pack Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:user123]}
+2025/12/09 23:35:45 TestOnBuyCardPackEvent 'calls card service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnBuyCardPackEvent/returns_error_on_missing_payload_fields
+2025/12/09 23:35:45 Received OnBuyCardPackEvent: {Method:buy_pack Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC]}
+2025/12/09 23:35:45 TestOnBuyCardPackEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnBuyCardPackEvent/returns_error_on_service_failure
+2025/12/09 23:35:45 Received OnBuyCardPackEvent: {Method:buy_pack Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:erroruser]}
+2025/12/09 23:35:45 TestOnBuyCardPackEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnBuyCardPackEvent (0.00s)
+    --- PASS: TestOnBuyCardPackEvent/calls_card_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnBuyCardPackEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnBuyCardPackEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnTradeEvent
+=== RUN   TestOnTradeEvent/calls_card_service_with_correct_params_and_returns_success
+2025/12/09 23:35:45 Received OnTradeEvent: {Method:trade Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[card_type:rock client_id:clientABC target_user_id:user2 user_id:user1]}
+2025/12/09 23:35:45 TestOnTradeEvent 'calls card service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnTradeEvent/returns_error_on_missing_payload_fields
+2025/12/09 23:35:45 Received OnTradeEvent: {Method:trade Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:user1]}
+2025/12/09 23:35:45 TestOnTradeEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnTradeEvent/returns_error_on_service_failure
+2025/12/09 23:35:45 Received OnTradeEvent: {Method:trade Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[card_type:rock client_id:clientABC target_user_id:user2 user_id:user1]}
+2025/12/09 23:35:45 TestOnTradeEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnTradeEvent (0.00s)
+    --- PASS: TestOnTradeEvent/calls_card_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnTradeEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnTradeEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnListUserCardsEvent
+=== RUN   TestOnListUserCardsEvent/calls_card_service_with_correct_params_and_returns_success
+2025/12/09 23:35:45 Received OnListUserCardsEvent: {Method:list_cards Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:user123]}
+2025/12/09 23:35:45 TestOnListUserCardsEvent 'calls card service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnListUserCardsEvent/returns_error_on_missing_payload_fields
+2025/12/09 23:35:45 Received OnListUserCardsEvent: {Method:list_cards Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC]}
+2025/12/09 23:35:45 TestOnListUserCardsEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnListUserCardsEvent/returns_error_on_service_failure
+2025/12/09 23:35:45 Received OnListUserCardsEvent: {Method:list_cards Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:erroruser]}
+2025/12/09 23:35:45 TestOnListUserCardsEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnListUserCardsEvent (0.00s)
+    --- PASS: TestOnListUserCardsEvent/calls_card_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnListUserCardsEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnListUserCardsEvent/returns_error_on_service_failure (0.00s)
 === RUN   TestOnStartMatchEvent
 === RUN   TestOnStartMatchEvent/calls_game_service_with_correct_playerID_for_queuing
-2025/12/09 04:03:50 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[user_id:p1]}
-    generic_handlers_test.go:209: Expected StartGame to be called, but it was not.
-    generic_handlers_test.go:212: Expected StartGame to be called with 'p1', but got ''
-    generic_handlers_test.go:216: Expected response method 'start_game', got ''
-    generic_handlers_test.go:219: Expected status 'success', got ''
-    generic_handlers_test.go:222: Expected status_message 'player queued', got ''
-2025/12/09 04:03:50 TestOnStartMatchEvent 'calls game service with correct playerID for queuing' completed (expected to fail).
+2025/12/09 23:35:45 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[user_id:p1]}
+2025/12/09 23:35:45 TestOnStartMatchEvent 'calls game service with correct params and returns success' completed (expected to fail).
 === RUN   TestOnStartMatchEvent/forms_match_and_returns_match_id
-2025/12/09 04:03:50 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[user_id:p2]}
-    generic_handlers_test.go:242: Expected StartGame to be called, but it was not.
-    generic_handlers_test.go:245: Expected StartGame to be called with 'p2', but got ''
-    generic_handlers_test.go:249: Expected response method 'start_game', got ''
-    generic_handlers_test.go:252: Expected status 'success', got ''
-    generic_handlers_test.go:255: Expected match_id 'match123', got '<nil>'
-2025/12/09 04:03:50 TestOnStartMatchEvent 'forms match and returns match_id' completed (expected to fail).
+2025/12/09 23:35:45 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[user_id:p2]}
+2025/12/09 23:35:45 TestOnStartMatchEvent 'forms match and returns match_id' completed (expected to fail).
 === RUN   TestOnStartMatchEvent/returns_error_on_missing_payload_fields
-2025/12/09 04:03:50 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[]}
-    generic_handlers_test.go:269: Expected response method 'error', got ''
-    generic_handlers_test.go:272: Expected an error message in payload, but got nil or empty
-2025/12/09 04:03:50 TestOnStartMatchEvent 'returns error on missing payload fields' completed (expected to fail).
+2025/12/09 23:35:45 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[]}
+2025/12/09 23:35:45 TestOnStartMatchEvent 'returns error on missing payload fields' completed (expected to fail).
 === RUN   TestOnStartMatchEvent/returns_error_on_service_failure
-2025/12/09 04:03:50 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[user_id:p1]}
-    generic_handlers_test.go:287: Expected response method 'error', got ''
-    generic_handlers_test.go:290: Expected error message 'game service error', got '<nil>'
-2025/12/09 04:03:50 TestOnStartMatchEvent 'returns error on service failure' completed (expected to fail).
---- FAIL: TestOnStartMatchEvent (0.00s)
-    --- FAIL: TestOnStartMatchEvent/calls_game_service_with_correct_playerID_for_queuing (0.00s)
-    --- FAIL: TestOnStartMatchEvent/forms_match_and_returns_match_id (0.00s)
-    --- FAIL: TestOnStartMatchEvent/returns_error_on_missing_payload_fields (0.00s)
-    --- FAIL: TestOnStartMatchEvent/returns_error_on_service_failure (0.00s)
-FAIL
-FAIL	cod-server/internal/handlers	0.025s
-=== RUN   TestGameService_StartGame
-=== RUN   TestGameService_StartGame/First_player_queues_up
-2025/12/09 04:03:51 Running TestGameService_StartGame: First player queues up
-2025/12/09 04:03:51 TestGameService_StartGame 'First player queues up' passed.
-=== RUN   TestGameService_StartGame/Second_player_forms_a_match
-2025/12/09 04:03:51 Running TestGameService_StartGame: Second player forms a match
-2025/12/09 04:03:51 TestGameService_StartGame 'Second player forms a match' passed.
---- PASS: TestGameService_StartGame (0.00s)
-    --- PASS: TestGameService_StartGame/First_player_queues_up (0.00s)
-    --- PASS: TestGameService_StartGame/Second_player_forms_a_match (0.00s)
-=== RUN   TestGameService_MakeMove
-=== RUN   TestGameService_MakeMove/Successful_First_Move
-2025/12/09 04:03:51 Running TestGameService_MakeMove: Successful First Move
-2025/12/09 04:03:51 TestGameService_MakeMove 'Successful First Move' passed.
-=== RUN   TestGameService_MakeMove/Second_move_determines_winner
-2025/12/09 04:03:51 Running TestGameService_MakeMove: Second move determines winner
-2025/12/09 04:03:51 TestGameService_MakeMove 'Second move determines winner' passed.
-=== RUN   TestGameService_MakeMove/Second_move_determines_draw
-2025/12/09 04:03:51 Running TestGameService_MakeMove: Second move determines draw
-2025/12/09 04:03:51 TestGameService_MakeMove 'Second move determines draw' passed.
-=== RUN   TestGameService_MakeMove/Make_Move_on_concluded_match
-2025/12/09 04:03:51 Running TestGameService_MakeMove: Make Move on concluded match
-2025/12/09 04:03:51 TestGameService_MakeMove 'Make Move on concluded match' passed.
-=== RUN   TestGameService_MakeMove/Make_Move_with_invalid_card
-2025/12/09 04:03:51 Running TestGameService_MakeMove: Make Move with invalid card
-2025/12/09 04:03:51 TestGameService_MakeMove 'Make Move with invalid card' passed.
---- PASS: TestGameService_MakeMove (0.00s)
-    --- PASS: TestGameService_MakeMove/Successful_First_Move (0.00s)
-    --- PASS: TestGameService_MakeMove/Second_move_determines_winner (0.00s)
-    --- PASS: TestGameService_MakeMove/Second_move_determines_draw (0.00s)
-    --- PASS: TestGameService_MakeMove/Make_Move_on_concluded_match (0.00s)
-    --- PASS: TestGameService_MakeMove/Make_Move_with_invalid_card (0.00s)
-=== RUN   TestGameService_GetGameState
-=== RUN   TestGameService_GetGameState/Successful_Get_Game_State
-2025/12/09 04:03:51 Running TestGameService_GetGameState: Successful Get Game State
-2025/12/09 04:03:51 TestGameService_GetGameState 'Successful Get Game State' passed.
-=== RUN   TestGameService_GetGameState/Get_Game_State_Non-Existent_Match
-2025/12/09 04:03:51 Running TestGameService_GetGameState: Get Game State Non-Existent Match
-2025/12/09 04:03:51 TestGameService_GetGameState 'Get Game State Non-Existent Match' passed.
---- PASS: TestGameService_GetGameState (0.00s)
-    --- PASS: TestGameService_GetGameState/Successful_Get_Game_State (0.00s)
-    --- PASS: TestGameService_GetGameState/Get_Game_State_Non-Existent_Match (0.00s)
-=== RUN   TestGameService_PlayerSurrender
-=== RUN   TestGameService_PlayerSurrender/Successful_Player_Surrender
-2025/12/09 04:03:51 Running TestGameService_PlayerSurrender: Successful Player Surrender
-2025/12/09 04:03:51 TestGameService_PlayerSurrender 'Successful Player Surrender' passed.
-=== RUN   TestGameService_PlayerSurrender/Player_Surrender_Non-Existent_Match
-2025/12/09 04:03:51 Running TestGameService_PlayerSurrender: Player Surrender Non-Existent Match
-2025/12/09 04:03:51 TestGameService_PlayerSurrender 'Player Surrender Non-Existent Match' passed.
-=== RUN   TestGameService_PlayerSurrender/Player_Surrender_with_player_not_in_match
-2025/12/09 04:03:51 Running TestGameService_PlayerSurrender: Player Surrender with player not in match
-2025/12/09 04:03:51 TestGameService_PlayerSurrender 'Player Surrender with player not in match' passed.
---- PASS: TestGameService_PlayerSurrender (0.00s)
-    --- PASS: TestGameService_PlayerSurrender/Successful_Player_Surrender (0.00s)
-    --- PASS: TestGameService_PlayerSurrender/Player_Surrender_Non-Existent_Match (0.00s)
-    --- PASS: TestGameService_PlayerSurrender/Player_Surrender_with_player_not_in_match (0.00s)
-=== RUN   TestUserService_Register
-=== RUN   TestUserService_Register/Successful_Registration
-2025/12/09 04:03:51 Running TestUserService_Register: Successful Registration
-2025/12/09 04:03:51 TestUserService_Register 'Successful Registration' passed.
-=== RUN   TestUserService_Register/Register_existing_user
-2025/12/09 04:03:51 Running TestUserService_Register: Register existing user
-2025/12/09 04:03:51 TestUserService_Register 'Register existing user' passed.
---- PASS: TestUserService_Register (0.00s)
-    --- PASS: TestUserService_Register/Successful_Registration (0.00s)
-    --- PASS: TestUserService_Register/Register_existing_user (0.00s)
-=== RUN   TestUserService_Login
-=== RUN   TestUserService_Login/Successful_Login
-2025/12/09 04:03:51 Running TestUserService_Login: Successful Login
-2025/12/09 04:03:51 TestUserService_Login 'Successful Login' passed.
-=== RUN   TestUserService_Login/Login_with_wrong_password
-2025/12/09 04:03:51 Running TestUserService_Login: Login with wrong password
-2025/12/09 04:03:51 TestUserService_Login 'Login with wrong password' passed.
-=== RUN   TestUserService_Login/Login_non-existent_user
-2025/12/09 04:03:51 Running TestUserService_Login: Login non-existent user
-2025/12/09 04:03:51 TestUserService_Login 'Login non-existent user' passed.
---- PASS: TestUserService_Login (0.00s)
-    --- PASS: TestUserService_Login/Successful_Login (0.00s)
-    --- PASS: TestUserService_Login/Login_with_wrong_password (0.00s)
-    --- PASS: TestUserService_Login/Login_non-existent_user (0.00s)
-=== RUN   TestCardService_BuyCardPack
-=== RUN   TestCardService_BuyCardPack/Successful_Buy_Card_Pack
-2025/12/09 04:03:51 Running TestCardService_BuyCardPack: Successful Buy Card Pack
-2025/12/09 04:03:51 TestCardService_BuyCardPack 'Successful Buy Card Pack' passed.
-=== RUN   TestCardService_BuyCardPack/Buy_Card_Pack_non-existent_user
-2025/12/09 04:03:51 Running TestCardService_BuyCardPack: Buy Card Pack non-existent user
-2025/12/09 04:03:51 TestCardService_BuyCardPack 'Buy Card Pack non-existent user' passed.
-=== RUN   TestCardService_BuyCardPack/checkStock_replenishes_packages
-2025/12/09 04:03:51 Running TestCardService_BuyCardPack: checkStock replenishes packages
-2025/12/09 04:03:51 TestCardService_BuyCardPack 'checkStock replenishes packages' passed.
---- PASS: TestCardService_BuyCardPack (0.00s)
-    --- PASS: TestCardService_BuyCardPack/Successful_Buy_Card_Pack (0.00s)
-    --- PASS: TestCardService_BuyCardPack/Buy_Card_Pack_non-existent_user (0.00s)
-    --- PASS: TestCardService_BuyCardPack/checkStock_replenishes_packages (0.00s)
-=== RUN   TestCardService_SwapCard
-=== RUN   TestCardService_SwapCard/Successful_Card_Swap
-2025/12/09 04:03:51 Running TestCardService_SwapCard: Successful Card Swap
-2025/12/09 04:03:51 TestCardService_SwapCard 'Successful Card Swap' passed.
-=== RUN   TestCardService_SwapCard/Swap_Card_non-existent_user
-2025/12/09 04:03:51 Running TestCardService_SwapCard: Swap Card non-existent user
-2025/12/09 04:03:51 TestCardService_SwapCard 'Swap Card non-existent user' passed.
-=== RUN   TestCardService_SwapCard/Swap_Card_type_not_owned
-2025/12/09 04:03:51 Running TestCardService_SwapCard: Swap Card type not owned
-2025/12/09 04:03:51 TestCardService_SwapCard 'Swap Card type not owned' passed.
---- PASS: TestCardService_SwapCard (0.00s)
-    --- PASS: TestCardService_SwapCard/Successful_Card_Swap (0.00s)
-    --- PASS: TestCardService_SwapCard/Swap_Card_non-existent_user (0.00s)
-    --- PASS: TestCardService_SwapCard/Swap_Card_type_not_owned (0.00s)
-=== RUN   TestCardService_ListUserCards
-=== RUN   TestCardService_ListUserCards/Successful_List_User_Cards
-2025/12/09 04:03:51 Running TestCardService_ListUserCards: Successful List User Cards
-2025/12/09 04:03:51 TestCardService_ListUserCards 'Successful List User Cards' passed.
-=== RUN   TestCardService_ListUserCards/List_Cards_non-existent_user
-2025/12/09 04:03:51 Running TestCardService_ListUserCards: List Cards non-existent user
-2025/12/09 04:03:51 TestCardService_ListUserCards 'List Cards non-existent user' passed.
---- PASS: TestCardService_ListUserCards (0.00s)
-    --- PASS: TestCardService_ListUserCards/Successful_List_User_Cards (0.00s)
-    --- PASS: TestCardService_ListUserCards/List_Cards_non-existent_user (0.00s)
+2025/12/09 23:35:45 Received OnStartMatchEvent: {Method:start_game Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[user_id:p1]}
+2025/12/09 23:35:45 TestOnStartMatchEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnStartMatchEvent (0.00s)
+    --- PASS: TestOnStartMatchEvent/calls_game_service_with_correct_playerID_for_queuing (0.00s)
+    --- PASS: TestOnStartMatchEvent/forms_match_and_returns_match_id (0.00s)
+    --- PASS: TestOnStartMatchEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnStartMatchEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnPlayerSurrenderEvent
+=== RUN   TestOnPlayerSurrenderEvent/calls_game_service_with_correct_params_and_returns_success
+2025/12/09 23:35:45 Received OnPlayerSurrenderEvent: {Method:surrender Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC match_id:match123 user_id:player1]}
+2025/12/09 23:35:45 TestOnPlayerSurrenderEvent 'calls game service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnPlayerSurrenderEvent/returns_error_on_missing_payload_fields
+2025/12/09 23:35:45 Received OnPlayerSurrenderEvent: {Method:surrender Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:player1]}
+2025/12/09 23:35:45 TestOnPlayerSurrenderEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnPlayerSurrenderEvent/returns_error_on_service_failure
+2025/12/09 23:35:45 Received OnPlayerSurrenderEvent: {Method:surrender Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC match_id:match123 user_id:player1]}
+2025/12/09 23:35:45 TestOnPlayerSurrenderEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnPlayerSurrenderEvent (0.00s)
+    --- PASS: TestOnPlayerSurrenderEvent/calls_game_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnPlayerSurrenderEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnPlayerSurrenderEvent/returns_error_on_service_failure (0.00s)
 PASS
-ok  	cod-server/internal/services	0.033s
-=== RUN   TestState
-    state_test.go:6: Teste para State não implementado
---- FAIL: TestState (0.00s)
-FAIL
-FAIL	cod-server/internal/state	0.025s
+ok  	cod-server/internal/handlers	(cached)
+FAIL	cod-server/internal/services [build failed]
+=== RUN   TestNewState
+--- PASS: TestNewState (0.00s)
+PASS
+ok  	cod-server/internal/state	(cached)
 === RUN   TestParseCommand
 === RUN   TestParseCommand/Empty_string
 2025/12/08 12:51:36 Running TestParseCommand: Empty string

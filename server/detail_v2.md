@@ -93,3 +93,95 @@ Esta é uma análise detalhada e iterativa do código-fonte e dos testes do proj
 *   **Qualidade do Código:** A struct é simples e funcional para seu propósito.
 *   **Estado dos Testes:** O arquivo `state_test.go` existe, mas contém apenas um teste placeholder que falha.
 *   **Conclusão/Próximos Passos:** Testes para garantir a correta inicialização e acesso concorrente (se aplicável) ao estado seriam úteis.
+
+## 10. API de Eventos (`events.md`)
+
+
+
+**Data da Análise:** 2025-12-08
+
+
+
+**Ficheiros Analisados:** `events.md`
+
+
+
+### Resumo
+
+
+
+O arquivo `events.md` define o contrato da API para a comunicação baseada em eventos via MQTT. Ele especifica a estrutura exata dos payloads JSON para cada tipo de requisição e resposta, garantindo a interoperabilidade entre cliente e servidor.
+
+
+
+### Estrutura Geral dos Eventos e Tópicos de Resposta
+
+
+
+*   **Requisições (Requests):** Enviadas para tópicos como `{feature}/{method}/requests`.
+
+    *   Formato: `{ "method": "<method>", "timestamp": "<timestamp>", "payload": { "<key>": "<value>" } }`
+
+    *   `register`: `{ "username": "<string>", "password": "<string>", "client_id": "<string>" }`
+
+    *   `login`: `{ "username": "<string>", "password": "<string>", "client_id": "<string>" }`
+
+    *   `start_game`: `{ "user_id": "<string>" }`
+
+    *   `play`: `{ "user_id": "<string>", "move": "<string>", "match_id": "<string>" }`
+
+    *   `surrender`: `{ "user_id": "<string>", "match_id": "<string>" }`
+
+    *   `list_cards`: `{ "user_id": "<string>" }`
+
+    *   `buy_pack`: `{ "user_id": "<string>" }`
+
+    *   `trade`: `{ "user_id": "<string>", "card_type": "<string>", "target_user_id": "<string>" }`
+
+
+
+*   **Respostas (Responses):** Publicadas em tópicos específicos, construídos para direcionar a mensagem de volta ao cliente ou usuário correto.
+
+    *   **Estrutura Geral do Tópico de Resposta:** `cod/response/{feature}/{method}/{identifier}`
+
+        *   `cod/response/users/{method}/{client_id}`: Para respostas de `register` e `login`. (`client_id` do payload da requisição).
+
+        *   `cod/response/game/{method}/{user_id}`: Para respostas de `start_game`. (`user_id` do payload da requisição).
+
+        *   `cod/response/game/play/{match_id}/{user_id}`: Para respostas de `play`.
+
+        *   `cod/response/game/surrender/{match_id}/{user_id}`: Para respostas de `surrender`.
+
+        *   `cod/response/cards/{method}/{user_id}`: Para respostas de `list_cards`, `buy_pack`, `trade`.
+
+    *   **Formato do Payload de Resposta:**
+
+        ```json
+
+        {
+
+            "method": "<method>",
+
+            "timestamp": "<timestamp>",
+
+            "payload": {
+
+                "status": "success || error",
+
+                "status_message": "<message>",
+
+                "<key>": "<value>"
+
+            }
+
+        }
+
+        ```
+
+
+
+### Conclusão
+
+
+
+A especificação em `events.md` é a "fonte da verdade" para a camada de `handlers`. A lógica dos handlers deve validar os payloads de entrada contra esta especificação e formatar as respostas de acordo. Qualquer divergência entre o código e este arquivo deve ser corrigida, tratando o `events.md` como o contrato a ser seguido.

@@ -171,7 +171,7 @@ func TestCardService_BuyCardPack(t *testing.T) {
 	})
 }
 
-func TestCardService_SwapCard(t *testing.T) {
+func TestCardService_Trade(t *testing.T) {
 	mockRepo := data.NewInMemoryRepository[*domain.User]()
 	cardService := NewCardService(mockRepo)
 	userService := NewUserService(mockRepo)
@@ -187,9 +187,9 @@ func TestCardService_SwapCard(t *testing.T) {
 	mockRepo.Update("userA", userA)
 	mockRepo.Update("userB", userB)
 
-	t.Run("Successful Card Swap", func(t *testing.T) {
-		log.Printf("Running TestCardService_SwapCard: Successful Card Swap")
-		err := cardService.SwapCard("userA", "userB", domain.Rock)
+	t.Run("Successful Trade", func(t *testing.T) {
+		log.Printf("Running TestCardService_Trade: Successful Trade")
+		err := cardService.Trade("userA", "userB", domain.Rock)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}
@@ -206,25 +206,25 @@ func TestCardService_SwapCard(t *testing.T) {
 		if cardB.ID != "rockA" {
 			t.Errorf("UserB should have rockA, got %s", cardB.ID)
 		}
-		log.Printf("TestCardService_SwapCard 'Successful Card Swap' passed.")
+		log.Printf("TestCardService_Trade 'Successful Trade' passed.")
 	})
 
-	t.Run("Swap Card non-existent user", func(t *testing.T) {
-		log.Printf("Running TestCardService_SwapCard: Swap Card non-existent user")
-		err := cardService.SwapCard("nonexistent", "userA", domain.Rock)
+	t.Run("Trade non-existent user", func(t *testing.T) {
+		log.Printf("Running TestCardService_Trade: Trade non-existent user")
+		err := cardService.Trade("nonexistent", "userA", domain.Rock)
 		if err == nil {
 			t.Fatalf("Expected error for non-existent user, got none")
 		}
-		log.Printf("TestCardService_SwapCard 'Swap Card non-existent user' passed.")
+		log.Printf("TestCardService_Trade 'Trade non-existent user' passed.")
 	})
 
-	t.Run("Swap Card type not owned", func(t *testing.T) {
-		log.Printf("Running TestCardService_SwapCard: Swap Card type not owned")
-		err := cardService.SwapCard("userA", "userB", domain.Scissors)
-		if err != nil {
-			t.Fatalf("Expected no error (nil return for not found cards), got %v", err)
+	t.Run("Trade Card type not owned", func(t *testing.T) {
+		log.Printf("Running TestCardService_Trade: Trade Card type not owned")
+		err := cardService.Trade("userA", "userB", domain.Scissors)
+		if err == nil { // Changed from err != nil to err == nil because the service now returns an error
+			t.Fatalf("Expected error when card type not owned, got none")
 		}
-		log.Printf("TestCardService_SwapCard 'Swap Card type not owned' passed.")
+		log.Printf("TestCardService_Trade 'Trade Card type not owned' passed.")
 	})
 }
 

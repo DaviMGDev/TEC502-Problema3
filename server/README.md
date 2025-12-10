@@ -128,7 +128,7 @@ O sistema segue uma arquitetura baseada em camadas e orientada a eventos. Um eve
 ## 4. Documentação de Arquitetura e API
 
 *   **`details.md`**: Contém uma análise detalhada e incremental de cada pacote do projeto.
-*   **`events.md`**: Descreve o contrato da API, com a especificação JSON para cada evento de requisição e resposta.
+*   **`events.md`**: Descreve o contrato da API, com a especificação JSON para cada evento de requisição e resposta, **incluindo a estratégia de tópicos de resposta que utiliza `client_id` e `user_id` para direcionamento e a estrutura de respostas com `status` dentro do `payload`.**
 *   **`game.md`**: Explica as regras e o fluxo do jogo "Cards of Destiny".
 *   **`tests.md`**: Descreve a metodologia e a filosofia de testes adotadas no projeto.
 

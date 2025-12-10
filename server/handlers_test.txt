@@ -1,0 +1,98 @@
+=== RUN   TestOnRegisterEvent
+=== RUN   TestOnRegisterEvent/calls_user_service_with_correct_params_and_returns_success
+2025/12/09 16:32:57 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:testpassword username:testuser]}
+2025/12/09 16:32:57 TestOnRegisterEvent 'calls user service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnRegisterEvent/returns_error_on_missing_payload_fields
+2025/12/09 16:32:57 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 username:testuser]}
+2025/12/09 16:32:57 TestOnRegisterEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnRegisterEvent/returns_error_on_service_failure
+2025/12/09 16:32:57 Received OnRegisterEvent: {Method:register Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:password username:erroruser]}
+2025/12/09 16:32:57 TestOnRegisterEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnRegisterEvent (0.00s)
+    --- PASS: TestOnRegisterEvent/calls_user_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnRegisterEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnRegisterEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnLoginEvent
+=== RUN   TestOnLoginEvent/Successful_Login_calls_service_with_correct_params_and_returns_success
+2025/12/09 16:32:57 Received OnLoginEvent: {Method:login Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:testpassword username:testuser]}
+2025/12/09 16:32:57 TestOnLoginEvent 'Successful Login' completed (expected to fail).
+=== RUN   TestOnLoginEvent/returns_error_on_missing_payload_fields
+2025/12/09 16:32:57 Received OnLoginEvent: {Method:login Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 username:testuser]}
+2025/12/09 16:32:57 TestOnLoginEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnLoginEvent/returns_error_on_service_failure
+2025/12/09 16:32:57 Received OnLoginEvent: {Method:login Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:client123 password:password username:erroruser]}
+2025/12/09 16:32:57 TestOnLoginEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnLoginEvent (0.00s)
+    --- PASS: TestOnLoginEvent/Successful_Login_calls_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnLoginEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnLoginEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnBuyCardPackEvent
+=== RUN   TestOnBuyCardPackEvent/calls_card_service_with_correct_params_and_returns_success
+2025/12/09 16:32:57 Received OnBuyCardPackEvent: {Method:buy_pack Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:user123]}
+2025/12/09 16:32:57 TestOnBuyCardPackEvent 'calls card service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnBuyCardPackEvent/returns_error_on_missing_payload_fields
+2025/12/09 16:32:57 Received OnBuyCardPackEvent: {Method:buy_pack Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC]}
+2025/12/09 16:32:57 TestOnBuyCardPackEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnBuyCardPackEvent/returns_error_on_service_failure
+2025/12/09 16:32:57 Received OnBuyCardPackEvent: {Method:buy_pack Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:erroruser]}
+2025/12/09 16:32:57 TestOnBuyCardPackEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnBuyCardPackEvent (0.00s)
+    --- PASS: TestOnBuyCardPackEvent/calls_card_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnBuyCardPackEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnBuyCardPackEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnSwapCardEvent
+=== RUN   TestOnSwapCardEvent/calls_card_service_with_correct_params_and_returns_success
+2025/12/09 16:32:57 Received OnSwapCardEvent: {Method:trade Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[card_type:rock client_id:clientABC trader_id:user1 username:user2]}
+    generic_handlers_test.go:384: Expected SwapCard to be called, but it was not.
+    generic_handlers_test.go:392: Expected status 'success', got 'error'
+2025/12/09 16:32:57 TestOnSwapCardEvent 'calls card service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnSwapCardEvent/returns_error_on_missing_payload_fields
+2025/12/09 16:32:57 Received OnSwapCardEvent: {Method:trade Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC trader_id:user1]}
+2025/12/09 16:32:57 TestOnSwapCardEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnSwapCardEvent/returns_error_on_service_failure
+2025/12/09 16:32:57 Received OnSwapCardEvent: {Method:trade Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[card_type:rock client_id:clientABC trader_id:user1 username:user2]}
+    generic_handlers_test.go:433: Expected error message 'swap failed', got 'missing or invalid user1 ID'
+2025/12/09 16:32:57 TestOnSwapCardEvent 'returns error on service failure' completed (expected to fail).
+--- FAIL: TestOnSwapCardEvent (0.00s)
+    --- FAIL: TestOnSwapCardEvent/calls_card_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnSwapCardEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- FAIL: TestOnSwapCardEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnListUserCardsEvent
+=== RUN   TestOnListUserCardsEvent/calls_card_service_with_correct_params_and_returns_success
+2025/12/09 16:32:57 Received OnListUserCardsEvent: {Method:list_cards Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:user123]}
+2025/12/09 16:32:57 TestOnListUserCardsEvent 'calls card service with correct params and returns success' completed (expected to fail).
+=== RUN   TestOnListUserCardsEvent/returns_error_on_missing_payload_fields
+2025/12/09 16:32:57 Received OnListUserCardsEvent: {Method:list_cards Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC]}
+2025/12/09 16:32:57 TestOnListUserCardsEvent 'returns error on missing payload fields' completed (expected to fail).
+=== RUN   TestOnListUserCardsEvent/returns_error_on_service_failure
+2025/12/09 16:32:57 Received OnListUserCardsEvent: {Method:list_cards Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC user_id:erroruser]}
+2025/12/09 16:32:57 TestOnListUserCardsEvent 'returns error on service failure' completed (expected to fail).
+--- PASS: TestOnListUserCardsEvent (0.00s)
+    --- PASS: TestOnListUserCardsEvent/calls_card_service_with_correct_params_and_returns_success (0.00s)
+    --- PASS: TestOnListUserCardsEvent/returns_error_on_missing_payload_fields (0.00s)
+    --- PASS: TestOnListUserCardsEvent/returns_error_on_service_failure (0.00s)
+=== RUN   TestOnPlayCardEvent
+=== RUN   TestOnPlayCardEvent/calls_game_service_with_correct_params_and_returns_success
+2025/12/09 16:32:57 Received OnPlayCardEvent: {Method:play Timestamp:0001-01-01 00:00:00 +0000 UTC Payload:map[client_id:clientABC match_id:match123 move:rock user_id:player1]}
+--- FAIL: TestOnPlayCardEvent (0.00s)
+    --- FAIL: TestOnPlayCardEvent/calls_game_service_with_correct_params_and_returns_success (0.00s)
+panic: runtime error: invalid memory address or nil pointer dereference [recovered, repanicked]
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x48 pc=0x52fb05]
+
+goroutine 40 [running]:
+testing.tRunner.func1.2({0x5664c0, 0x6cc8a0})
+	/usr/lib/go/src/testing/testing.go:1872 +0x237
+testing.tRunner.func1()
+	/usr/lib/go/src/testing/testing.go:1875 +0x35b
+panic({0x5664c0?, 0x6cc8a0?})
+	/usr/lib/go/src/runtime/panic.go:783 +0x132
+cod-server/internal/handlers.(*HandlersImplementation).OnPlayCardEvent(0xc0000c9f00, {{0x590213, 0x4}, {0x0, 0x0, 0x0}, 0xc000096f30})
+	/home/davi/Distrobox/arch-box/davi/tmp/TEC502-Problema3/server/internal/handlers/generic_handlers.go:385 +0x5c5
+cod-server/internal/handlers.TestOnPlayCardEvent.func1(0xc0000dce00)
+	/home/davi/Distrobox/arch-box/davi/tmp/TEC502-Problema3/server/internal/handlers/generic_handlers_test.go:522 +0x277
+testing.tRunner(0xc0000dce00, 0x59f938)
+	/usr/lib/go/src/testing/testing.go:1934 +0xea
+created by testing.(*T).Run in goroutine 39
+	/usr/lib/go/src/testing/testing.go:1997 +0x465
+FAIL	cod-server/internal/handlers	0.010s
+FAIL

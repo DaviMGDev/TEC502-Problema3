@@ -4,13 +4,14 @@ import (
 	"cod-server/internal/data"
 	"cod-server/internal/domain"
 	"cod-server/internal/utils"
+	"errors" // Added this import
 	"math/rand"
 	"strconv"
 )
 
 type CardService interface {
 	BuyCardPack(userID string) error 
-	SwapCard(user1, user2, cardType string) error 
+	Trade(user1, user2, cardType string) error 
 	ListUserCards(userID string) ([]*domain.Card, error)
 }
 
@@ -41,7 +42,7 @@ func (s *CardServiceImplementation) checkStock() {
 			level := (rand.Int63() % 100) + 1
 			for _, t := range types {	
 				card := &domain.Card{
-					ID: strconv.FormatUint(rand.Uint64(), 16),
+					ID: strconv.FormatUint(rand.Uint64(), 10), // Changed to base 10 for consistency
 					Type: t,
 					Level: level,
 				}
@@ -68,7 +69,7 @@ func (s *CardServiceImplementation) BuyCardPack(userID string) error {
 	return s.userRepo.Update(userID, user)
 }
 
-func (s *CardServiceImplementation) SwapCard(user1, user2, cardType string) error {
+func (s *CardServiceImplementation) Trade(user1, user2, cardType string) error {
 	first, err := s.userRepo.Read(user1)
 	if err != nil {
 		return err 
@@ -80,7 +81,7 @@ func (s *CardServiceImplementation) SwapCard(user1, user2, cardType string) erro
 	card1, ok1 := first.Cards.Get(cardType)
 	card2, ok2 := second.Cards.Get(cardType)
 	if !ok1 || !ok2 {
-		return nil 
+		return errors.New("one or both users do not have the specified card type") 
 	}
 	first.Cards.Set(cardType, card2)
 	second.Cards.Set(cardType, card1)

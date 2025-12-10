@@ -13,7 +13,8 @@
     "timestamp": "2024-06-15T12:00:00Z",
     "payload": {
         "username": "new_user",
-        "password": "secure_password"
+        "password": "secure_password",
+        "client_id": "unique_client_identifier"
     }
 }
 
@@ -22,7 +23,8 @@
     "timestamp": "2024-06-15T12:05:00Z",
     "payload": {
         "username": "existing_user",
-        "password": "user_password"
+        "password": "user_password",
+        "client_id": "unique_client_identifier"
     }
 }
 
@@ -81,13 +83,24 @@
 
 ```
 
-# Responses on mqtt (topics can vary based on method)
+# Responses on mqtt (each client subscribes to its own response topics)
+
+As respostas são publicadas em tópicos específicos, construídos para direcionar a mensagem de volta ao cliente ou usuário correto.
+
+**Estrutura Geral do Tópico de Resposta:** `cod/response/{feature}/{method}/{identifier}`
+
+*   `cod/response/users/{method}/{client_id}`: Para eventos de `register` e `login`.
+*   `cod/response/game/{method}/{user_id}`: Para eventos `start_game`.
+*   `cod/response/game/{method}/{match_id}/{user_id}`: Para eventos `play` (ou `move`) e `surrender`.
+*   `cod/response/cards/{method}/{user_id}`: Para eventos `list_cards`, `buy_pack`, `trade`.
+
+**Formato do Payload de Resposta:**
 ```json
 {
     "method": "<method>",
     "timestamp": "<timestamp>",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>",
         "<key>": "<value>"
     }
@@ -96,8 +109,8 @@
 {
     "method": "register",
     "timestamp": "2024-06-15T12:00:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>",
         "user_id": "12345 || empty"
     }
@@ -106,8 +119,8 @@
 {
     "method": "login",
     "timestamp": "2024-06-15T12:05:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>",
         "user_id": "12345 || empty"
     }
@@ -116,8 +129,8 @@
 {
     "method": "start_game",
     "timestamp": "2024-06-15T12:10:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>",
         "match_id": "67890 || empty"
     }
@@ -126,8 +139,8 @@
 {
     "method": "play",
     "timestamp": "2024-06-15T12:15:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>",
         "round_result": "win || lose || draw || empty"
     }
@@ -136,8 +149,8 @@
 {
     "method": "surrender",
     "timestamp": "2024-06-15T12:20:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>"
     }
 }
@@ -145,8 +158,8 @@
 {
     "method": "list_cards",
     "timestamp": "2024-06-15T12:25:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>",
         "cards": ["card1", "card2", "..."] || []
     }
@@ -155,8 +168,8 @@
 {
     "method": "buy_pack",
     "timestamp": "2024-06-15T12:30:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>",
         "new_cards": ["cardA", "cardB", "..."] || []
     }
@@ -165,8 +178,8 @@
 {
     "method": "trade",
     "timestamp": "2024-06-15T12:35:01Z",
-    "status": "success || error",
     "payload": {
+        "status": "success || error",
         "status_message": "<message>"
     }
 }

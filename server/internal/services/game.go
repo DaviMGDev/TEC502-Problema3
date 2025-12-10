@@ -12,7 +12,7 @@ type GameService interface {
 	StartGame(playerID string) (*domain.Match, error)
 	MakeMove(gameID, playerID, cardID string) error
 	GetGameState(gameID string) (*domain.Match, error)
-	PLayerSurrender(gameID, player string) error
+	PlayerSurrender(gameID, player string) error
 }
 
 type GameServiceImplementation struct {
@@ -135,7 +135,7 @@ func (s *GameServiceImplementation) GetGameState(gameID string) (*domain.Match, 
 	return s.gameRepo.Read(gameID)
 }
 
-func (s *GameServiceImplementation) PLayerSurrender(gameID, player string) error {
+func (s *GameServiceImplementation) PlayerSurrender(gameID, player string) error {
 	match, err := s.gameRepo.Read(gameID)
 	if err != nil {
 		return err

@@ -7,8 +7,8 @@ import (
 )
 
 type Orchestrator struct {
-	handlers.Handlers 
-	state *state.State
+	handlers.Handlers
+	state	*state.State
 }
 
 func (orch *Orchestrator) OnRegisterEvent(event protocol.Event) protocol.Event {
@@ -42,4 +42,3 @@ func (orch *Orchestrator) OnPlayCardEvent(event protocol.Event) protocol.Event {
 func (orch *Orchestrator) OnGetMatchResultEvent(event protocol.Event) protocol.Event {
 	return orch.Handlers.OnGetMatchResultEvent(event)
 }
-

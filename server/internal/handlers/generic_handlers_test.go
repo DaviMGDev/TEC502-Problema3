@@ -9,22 +9,18 @@ import (
 	"testing"
 )
 
-// --- Mocks (Spies) ---
-
 type MockUserService struct {
-	// Spies
-	RegisterCalled bool
-	RegisterUsr    string
-	RegisterPwd    string
-	LoginCalled    bool
-	LoginUsr       string
-	LoginPwd       string
+	RegisterCalled	bool
+	RegisterUsr	string
+	RegisterPwd	string
+	LoginCalled	bool
+	LoginUsr	string
+	LoginPwd	string
 
-	// Stubs
-	RegisterReturnUser  *domain.User
-	RegisterReturnError error
-	LoginReturnID       string
-	LoginReturnError    error
+	RegisterReturnUser	*domain.User
+	RegisterReturnError	error
+	LoginReturnID		string
+	LoginReturnError	error
 }
 
 func (m *MockUserService) Register(username, password string) (*domain.User, error) {
@@ -41,21 +37,19 @@ func (m *MockUserService) Login(username, password string) (string, error) {
 }
 
 type MockCardService struct {
-	// Spies
-	BuyCardPackCalled   bool
-	BuyCardPackUserID   string
-	TradeCalled         bool // Renamed from SwapCardCalled
-	TradeUser1          string // Renamed from SwapCardUser1
-	TradeUser2          string // Renamed from SwapCardUser2
-	TradeCardType       string // Renamed from SwapCardCardType
-	ListUserCardsCalled bool
-	ListUserCardsUserID string
+	BuyCardPackCalled	bool
+	BuyCardPackUserID	string
+	TradeCalled		bool
+	TradeUser1		string
+	TradeUser2		string
+	TradeCardType		string
+	ListUserCardsCalled	bool
+	ListUserCardsUserID	string
 
-	// Stubs
-	BuyCardPackReturnError    error
-	TradeReturnError          error // Renamed from SwapCardReturnError
-	ListUserCardsReturn       []*domain.Card
-	ListUserCardsReturnError  error
+	BuyCardPackReturnError		error
+	TradeReturnError		error
+	ListUserCardsReturn		[]*domain.Card
+	ListUserCardsReturnError	error
 }
 
 func (m *MockCardService) BuyCardPack(userID string) error {
@@ -63,7 +57,7 @@ func (m *MockCardService) BuyCardPack(userID string) error {
 	m.BuyCardPackUserID = userID
 	return m.BuyCardPackReturnError
 }
-func (m *MockCardService) Trade(user1, user2, cardType string) error { // Renamed from SwapCard
+func (m *MockCardService) Trade(user1, user2, cardType string) error {
 	m.TradeCalled = true
 	m.TradeUser1 = user1
 	m.TradeUser2 = user2
@@ -77,26 +71,24 @@ func (m *MockCardService) ListUserCards(userID string) ([]*domain.Card, error) {
 }
 
 type MockGameService struct {
-	// Spies
-	StartGameCalled       bool
-	StartGamePlayerID     string
-	MakeMoveCalled        bool
-	MakeMoveGameID        string
-	MakeMovePlayerID      string
-	MakeMoveCardID        string
-	GetGameStateCalled    bool
-	GetGameStateGameID    string
-	PlayerSurrenderCalled bool // Renamed from PLayerSurrenderCalled
-	PlayerSurrenderGameID string // Renamed from PLayerSurrenderGameID
-	PlayerSurrenderPlayer string // Renamed from PLayerSurrenderPlayer
+	StartGameCalled		bool
+	StartGamePlayerID	string
+	MakeMoveCalled		bool
+	MakeMoveGameID		string
+	MakeMovePlayerID	string
+	MakeMoveCardID		string
+	GetGameStateCalled	bool
+	GetGameStateGameID	string
+	PlayerSurrenderCalled	bool
+	PlayerSurrenderGameID	string
+	PlayerSurrenderPlayer	string
 
-	// Stubs
-	StartGameReturnMatch        *domain.Match
-	StartGameReturnError error
-	MakeMoveReturnError  error
-	GetGameStateReturnMatch *domain.Match
-	GetGameStateReturnError error
-	PlayerSurrenderReturnError error // Renamed from PLayerSurrenderReturnError
+	StartGameReturnMatch		*domain.Match
+	StartGameReturnError		error
+	MakeMoveReturnError		error
+	GetGameStateReturnMatch		*domain.Match
+	GetGameStateReturnError		error
+	PlayerSurrenderReturnError	error
 }
 
 func (m *MockGameService) StartGame(playerID string) (*domain.Match, error) {
@@ -116,20 +108,18 @@ func (m *MockGameService) GetGameState(gameID string) (*domain.Match, error) {
 	m.GetGameStateGameID = gameID
 	return m.GetGameStateReturnMatch, m.GetGameStateReturnError
 }
-func (m *MockGameService) PlayerSurrender(gameID, player string) error { // Renamed from PLayerSurrender
+func (m *MockGameService) PlayerSurrender(gameID, player string) error {
 	m.PlayerSurrenderCalled = true
 	m.PlayerSurrenderGameID = gameID
 	m.PlayerSurrenderPlayer = player
 	return m.PlayerSurrenderReturnError
 }
 
-// --- Setup Helper ---
-
 type TestHandlerClients struct {
-	Handlers    *HandlersImplementation
-	UserService *MockUserService
-	CardService *MockCardService
-	GameService *MockGameService
+	Handlers	*HandlersImplementation
+	UserService	*MockUserService
+	CardService	*MockCardService
+	GameService	*MockGameService
 }
 
 func setupTestHandlers() TestHandlerClients {
@@ -138,24 +128,22 @@ func setupTestHandlers() TestHandlerClients {
 	mockGame := &MockGameService{}
 	handlers := NewHandlers(mockUser, mockCard, mockGame)
 	return TestHandlerClients{
-		Handlers:    handlers,
-		UserService: mockUser,
-		CardService: mockCard,
-		GameService: mockGame,
+		Handlers:	handlers,
+		UserService:	mockUser,
+		CardService:	mockCard,
+		GameService:	mockGame,
 	}
 }
-
-// --- Handler Tests ---
 
 func TestOnRegisterEvent(t *testing.T) {
 	t.Run("calls user service with correct params and returns success", func(t *testing.T) {
 		clients := setupTestHandlers()
-		// Mock service to return a user
+
 		clients.UserService.RegisterReturnUser = &domain.User{ID: "newUserID"}
 
 		inputEvent := protocol.Event{
-			Method:  "register",
-			Payload: utils.Dict{"username": "testuser", "password": "testpassword", "client_id": "client123"},
+			Method:		"register",
+			Payload:	utils.Dict{"username": "testuser", "password": "testpassword", "client_id": "client123"},
 		}
 
 		resp := clients.Handlers.OnRegisterEvent(inputEvent)
@@ -176,7 +164,7 @@ func TestOnRegisterEvent(t *testing.T) {
 		if status, ok := resp.Payload["status"].(string); !ok || status != "success" {
 			t.Errorf("Expected status 'success', got '%v'", resp.Payload["status"])
 		}
-		if userID, ok := resp.Payload["user_id"].(string); !ok || userID == "" { // Check if user_id is populated
+		if userID, ok := resp.Payload["user_id"].(string); !ok || userID == "" {
 			t.Errorf("Expected non-empty user_id in payload, got '%v'", resp.Payload["user_id"])
 		}
 		log.Println("TestOnRegisterEvent 'calls user service with correct params and returns success' completed (expected to fail).")
@@ -186,8 +174,8 @@ func TestOnRegisterEvent(t *testing.T) {
 		clients := setupTestHandlers()
 
 		resp := clients.Handlers.OnRegisterEvent(protocol.Event{
-			Method:  "register",
-			Payload: utils.Dict{"username": "testuser", "client_id": "client123"}, // Missing password
+			Method:		"register",
+			Payload:	utils.Dict{"username": "testuser", "client_id": "client123"},
 		})
 
 		if resp.Method != "register" {
@@ -207,8 +195,8 @@ func TestOnRegisterEvent(t *testing.T) {
 		clients.UserService.RegisterReturnError = errors.New("user service error")
 
 		resp := clients.Handlers.OnRegisterEvent(protocol.Event{
-			Method:  "register",
-			Payload: utils.Dict{"username": "erroruser", "password": "password", "client_id": "client123"},
+			Method:		"register",
+			Payload:	utils.Dict{"username": "erroruser", "password": "password", "client_id": "client123"},
 		})
 
 		if resp.Method != "register" {
@@ -230,8 +218,8 @@ func TestOnLoginEvent(t *testing.T) {
 		clients.UserService.LoginReturnID = "existingUserID"
 
 		inputEvent := protocol.Event{
-			Method:  "login",
-			Payload: utils.Dict{"username": "testuser", "password": "testpassword", "client_id": "client123"},
+			Method:		"login",
+			Payload:	utils.Dict{"username": "testuser", "password": "testpassword", "client_id": "client123"},
 		}
 
 		resp := clients.Handlers.OnLoginEvent(inputEvent)
@@ -260,10 +248,10 @@ func TestOnLoginEvent(t *testing.T) {
 
 	t.Run("returns error on missing payload fields", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
+
 		resp := clients.Handlers.OnLoginEvent(protocol.Event{
-			Method:  "login",
-			Payload: utils.Dict{"username": "testuser", "client_id": "client123"}, // Missing password
+			Method:		"login",
+			Payload:	utils.Dict{"username": "testuser", "client_id": "client123"},
 		})
 
 		if resp.Method != "login" {
@@ -281,10 +269,10 @@ func TestOnLoginEvent(t *testing.T) {
 	t.Run("returns error on service failure", func(t *testing.T) {
 		clients := setupTestHandlers()
 		clients.UserService.LoginReturnError = errors.New("invalid credentials")
-		
+
 		resp := clients.Handlers.OnLoginEvent(protocol.Event{
-			Method:  "login",
-			Payload: utils.Dict{"username": "erroruser", "password": "password", "client_id": "client123"},
+			Method:		"login",
+			Payload:	utils.Dict{"username": "erroruser", "password": "password", "client_id": "client123"},
 		})
 
 		if resp.Method != "login" {
@@ -303,12 +291,12 @@ func TestOnLoginEvent(t *testing.T) {
 func TestOnBuyCardPackEvent(t *testing.T) {
 	t.Run("calls card service with correct params and returns success", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
+
 		inputEvent := protocol.Event{
-			Method:  "buy_pack",
-			Payload: utils.Dict{"user_id": "user123", "client_id": "clientABC"},
+			Method:		"buy_pack",
+			Payload:	utils.Dict{"user_id": "user123", "client_id": "clientABC"},
 		}
-		
+
 		resp := clients.Handlers.OnBuyCardPackEvent(inputEvent)
 
 		if !clients.CardService.BuyCardPackCalled {
@@ -317,7 +305,7 @@ func TestOnBuyCardPackEvent(t *testing.T) {
 		if clients.CardService.BuyCardPackUserID != "user123" {
 			t.Errorf("Expected user_id 'user123', got '%s'", clients.CardService.BuyCardPackUserID)
 		}
-		
+
 		if resp.Method != "buy_pack" {
 			t.Errorf("Expected response method 'buy_pack', got '%s'", resp.Method)
 		}
@@ -329,10 +317,10 @@ func TestOnBuyCardPackEvent(t *testing.T) {
 
 	t.Run("returns error on missing payload fields", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
+
 		resp := clients.Handlers.OnBuyCardPackEvent(protocol.Event{
-			Method:  "buy_pack",
-			Payload: utils.Dict{"client_id": "clientABC"}, // Missing user_id
+			Method:		"buy_pack",
+			Payload:	utils.Dict{"client_id": "clientABC"},
 		})
 
 		if resp.Method != "buy_pack" {
@@ -350,10 +338,10 @@ func TestOnBuyCardPackEvent(t *testing.T) {
 	t.Run("returns error on service failure", func(t *testing.T) {
 		clients := setupTestHandlers()
 		clients.CardService.BuyCardPackReturnError = errors.New("buy pack failed")
-		
+
 		resp := clients.Handlers.OnBuyCardPackEvent(protocol.Event{
-			Method:  "buy_pack",
-			Payload: utils.Dict{"user_id": "erroruser", "client_id": "clientABC"},
+			Method:		"buy_pack",
+			Payload:	utils.Dict{"user_id": "erroruser", "client_id": "clientABC"},
 		})
 
 		if resp.Method != "buy_pack" {
@@ -369,18 +357,18 @@ func TestOnBuyCardPackEvent(t *testing.T) {
 	})
 }
 
-func TestOnTradeEvent(t *testing.T) { // Renamed from TestOnSwapCardEvent
+func TestOnTradeEvent(t *testing.T) {
 	t.Run("calls card service with correct params and returns success", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
-		inputEvent := protocol.Event{
-			Method:  "trade", 
-			Payload: utils.Dict{"user_id": "user1", "card_type": "rock", "target_user_id": "user2", "client_id": "clientABC"}, // Updated payload fields
-		}
-		
-		resp := clients.Handlers.OnTradeEvent(inputEvent) // Renamed from OnSwapCardEvent
 
-		if !clients.CardService.TradeCalled { // Renamed from SwapCardCalled
+		inputEvent := protocol.Event{
+			Method:		"trade",
+			Payload:	utils.Dict{"user_id": "user1", "card_type": "rock", "target_user_id": "user2", "client_id": "clientABC"},
+		}
+
+		resp := clients.Handlers.OnTradeEvent(inputEvent)
+
+		if !clients.CardService.TradeCalled {
 			t.Error("Expected Trade to be called, but it was not.")
 		}
 		if clients.CardService.TradeUser1 != "user1" {
@@ -392,8 +380,8 @@ func TestOnTradeEvent(t *testing.T) { // Renamed from TestOnSwapCardEvent
 		if clients.CardService.TradeCardType != "rock" {
 			t.Errorf("Expected card_type 'rock', got '%s'", clients.CardService.TradeCardType)
 		}
-		
-		if resp.Method != "trade" { 
+
+		if resp.Method != "trade" {
 			t.Errorf("Expected response method 'trade', got '%s'", resp.Method)
 		}
 		if status, ok := resp.Payload["status"].(string); !ok || status != "success" {
@@ -404,10 +392,10 @@ func TestOnTradeEvent(t *testing.T) { // Renamed from TestOnSwapCardEvent
 
 	t.Run("returns error on missing payload fields", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
-		resp := clients.Handlers.OnTradeEvent(protocol.Event{ // Renamed from OnSwapCardEvent
-			Method:  "trade",
-			Payload: utils.Dict{"user_id": "user1", "client_id": "clientABC"}, // Missing card_type and target_user_id
+
+		resp := clients.Handlers.OnTradeEvent(protocol.Event{
+			Method:		"trade",
+			Payload:	utils.Dict{"user_id": "user1", "client_id": "clientABC"},
 		})
 
 		if resp.Method != "trade" {
@@ -424,11 +412,11 @@ func TestOnTradeEvent(t *testing.T) { // Renamed from TestOnSwapCardEvent
 
 	t.Run("returns error on service failure", func(t *testing.T) {
 		clients := setupTestHandlers()
-		clients.CardService.TradeReturnError = errors.New("trade failed") // Renamed from SwapCardReturnError
-		
-		resp := clients.Handlers.OnTradeEvent(protocol.Event{ // Renamed from OnSwapCardEvent
-			Method:  "trade",
-			Payload: utils.Dict{"user_id": "user1", "card_type": "rock", "target_user_id": "user2", "client_id": "clientABC"},
+		clients.CardService.TradeReturnError = errors.New("trade failed")
+
+		resp := clients.Handlers.OnTradeEvent(protocol.Event{
+			Method:		"trade",
+			Payload:	utils.Dict{"user_id": "user1", "card_type": "rock", "target_user_id": "user2", "client_id": "clientABC"},
 		})
 
 		if resp.Method != "trade" {
@@ -453,16 +441,16 @@ func TestOnListUserCardsEvent(t *testing.T) {
 		}
 
 		inputEvent := protocol.Event{
-			Method:  "list_cards",
-			Payload: utils.Dict{"user_id": "user123", "client_id": "clientABC"},
+			Method:		"list_cards",
+			Payload:	utils.Dict{"user_id": "user123", "client_id": "clientABC"},
 		}
-		
+
 		resp := clients.Handlers.OnListUserCardsEvent(inputEvent)
 
 		if !clients.CardService.ListUserCardsCalled {
 			t.Error("Expected ListUserCards to be called, but it was not.")
 		}
-		
+
 		if resp.Method != "list_cards" {
 			t.Errorf("Expected response method 'list_cards', got '%s'", resp.Method)
 		}
@@ -477,10 +465,10 @@ func TestOnListUserCardsEvent(t *testing.T) {
 
 	t.Run("returns error on missing payload fields", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
+
 		resp := clients.Handlers.OnListUserCardsEvent(protocol.Event{
-			Method:  "list_cards",
-			Payload: utils.Dict{"client_id": "clientABC"}, // Missing user_id
+			Method:		"list_cards",
+			Payload:	utils.Dict{"client_id": "clientABC"},
 		})
 
 		if resp.Method != "list_cards" {
@@ -498,10 +486,10 @@ func TestOnListUserCardsEvent(t *testing.T) {
 	t.Run("returns error on service failure", func(t *testing.T) {
 		clients := setupTestHandlers()
 		clients.CardService.ListUserCardsReturnError = errors.New("list cards failed")
-		
+
 		resp := clients.Handlers.OnListUserCardsEvent(protocol.Event{
-			Method:  "list_cards",
-			Payload: utils.Dict{"user_id": "erroruser", "client_id": "clientABC"},
+			Method:		"list_cards",
+			Payload:	utils.Dict{"user_id": "erroruser", "client_id": "clientABC"},
 		})
 
 		if resp.Method != "list_cards" {
@@ -520,14 +508,13 @@ func TestOnListUserCardsEvent(t *testing.T) {
 func TestOnStartMatchEvent(t *testing.T) {
 	t.Run("calls game service with correct playerID for queuing", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
-		// Simulate StartGame returning nil match (player queued)
-		clients.GameService.StartGameReturnMatch = nil 
+
+		clients.GameService.StartGameReturnMatch = nil
 		clients.GameService.StartGameReturnError = nil
 
 		inputEvent := protocol.Event{
-			Method:  "start_game",
-			Payload: utils.Dict{"user_id": "p1"},
+			Method:		"start_game",
+			Payload:	utils.Dict{"user_id": "p1"},
 		}
 
 		resp := clients.Handlers.OnStartMatchEvent(inputEvent)
@@ -538,7 +525,7 @@ func TestOnStartMatchEvent(t *testing.T) {
 		if clients.GameService.StartGamePlayerID != "p1" {
 			t.Errorf("Expected StartGame to be called with 'p1', but got '%s'", clients.GameService.StartGamePlayerID)
 		}
-		
+
 		if resp.Method != "start_game" {
 			t.Errorf("Expected response method 'start_game', got '%s'", resp.Method)
 		}
@@ -548,7 +535,7 @@ func TestOnStartMatchEvent(t *testing.T) {
 		if msg, ok := resp.Payload["status_message"].(string); !ok || msg != "player queued" {
 			t.Errorf("Expected status_message 'player queued', got '%s'", msg)
 		}
-		if resp.Payload["match_id"] != nil { // Should not have a match ID if queued
+		if resp.Payload["match_id"] != nil {
 			t.Errorf("Expected match_id to be nil, got '%v'", resp.Payload["match_id"])
 		}
 		log.Println("TestOnStartMatchEvent 'calls game service with correct params and returns success' completed (expected to fail).")
@@ -561,8 +548,8 @@ func TestOnStartMatchEvent(t *testing.T) {
 		clients.GameService.StartGameReturnError = nil
 
 		resp := clients.Handlers.OnStartMatchEvent(protocol.Event{
-			Method:  "start_game",
-			Payload: utils.Dict{"user_id": "p2"},
+			Method:		"start_game",
+			Payload:	utils.Dict{"user_id": "p2"},
 		})
 
 		if !clients.GameService.StartGameCalled {
@@ -586,10 +573,10 @@ func TestOnStartMatchEvent(t *testing.T) {
 
 	t.Run("returns error on missing payload fields", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
+
 		resp := clients.Handlers.OnStartMatchEvent(protocol.Event{
-			Method:  "start_game",
-			Payload: utils.Dict{}, // Missing user_id
+			Method:		"start_game",
+			Payload:	utils.Dict{},
 		})
 
 		if resp.Method != "start_game" {
@@ -607,10 +594,10 @@ func TestOnStartMatchEvent(t *testing.T) {
 	t.Run("returns error on service failure", func(t *testing.T) {
 		clients := setupTestHandlers()
 		clients.GameService.StartGameReturnError = errors.New("game service error")
-		
+
 		resp := clients.Handlers.OnStartMatchEvent(protocol.Event{
-			Method:  "start_game",
-			Payload: utils.Dict{"user_id": "p1"},
+			Method:		"start_game",
+			Payload:	utils.Dict{"user_id": "p1"},
 		})
 
 		if resp.Method != "start_game" {
@@ -626,28 +613,28 @@ func TestOnStartMatchEvent(t *testing.T) {
 	})
 }
 
-func TestOnPlayerSurrenderEvent(t *testing.T) { // Renamed from TestOnPLayerSurrenderEvent
+func TestOnPlayerSurrenderEvent(t *testing.T) {
 	t.Run("calls game service with correct params and returns success", func(t *testing.T) {
 		clients := setupTestHandlers()
-		clients.GameService.PlayerSurrenderReturnError = nil // Renamed from PLayerSurrenderReturnError
+		clients.GameService.PlayerSurrenderReturnError = nil
 
 		inputEvent := protocol.Event{
-			Method:  "surrender",
-			Payload: utils.Dict{"user_id": "player1", "match_id": "match123", "client_id": "clientABC"},
+			Method:		"surrender",
+			Payload:	utils.Dict{"user_id": "player1", "match_id": "match123", "client_id": "clientABC"},
 		}
 
-		resp := clients.Handlers.OnPlayerSurrenderEvent(inputEvent) // Renamed from OnPLayerSurrenderEvent
+		resp := clients.Handlers.OnPlayerSurrenderEvent(inputEvent)
 
-		if !clients.GameService.PlayerSurrenderCalled { // Renamed from PLayerSurrenderCalled
+		if !clients.GameService.PlayerSurrenderCalled {
 			t.Error("Expected PlayerSurrender to be called, but it was not.")
 		}
-		if clients.GameService.PlayerSurrenderGameID != "match123" { // Renamed from PLayerSurrenderGameID
+		if clients.GameService.PlayerSurrenderGameID != "match123" {
 			t.Errorf("Expected gameID 'match123', got '%s'", clients.GameService.PlayerSurrenderGameID)
 		}
-		if clients.GameService.PlayerSurrenderPlayer != "player1" { // Renamed from PLayerSurrenderPlayer
+		if clients.GameService.PlayerSurrenderPlayer != "player1" {
 			t.Errorf("Expected player 'player1', got '%s'", clients.GameService.PlayerSurrenderPlayer)
 		}
-		
+
 		if resp.Method != "surrender" {
 			t.Errorf("Expected response method 'surrender', got '%s'", resp.Method)
 		}
@@ -659,10 +646,10 @@ func TestOnPlayerSurrenderEvent(t *testing.T) { // Renamed from TestOnPLayerSurr
 
 	t.Run("returns error on missing payload fields", func(t *testing.T) {
 		clients := setupTestHandlers()
-		
-		resp := clients.Handlers.OnPlayerSurrenderEvent(protocol.Event{ // Renamed from OnPLayerSurrenderEvent
-			Method:  "surrender",
-			Payload: utils.Dict{"user_id": "player1", "client_id": "clientABC"}, // Missing match_id
+
+		resp := clients.Handlers.OnPlayerSurrenderEvent(protocol.Event{
+			Method:		"surrender",
+			Payload:	utils.Dict{"user_id": "player1", "client_id": "clientABC"},
 		})
 
 		if resp.Method != "surrender" {
@@ -679,11 +666,11 @@ func TestOnPlayerSurrenderEvent(t *testing.T) { // Renamed from TestOnPLayerSurr
 
 	t.Run("returns error on service failure", func(t *testing.T) {
 		clients := setupTestHandlers()
-		clients.GameService.PlayerSurrenderReturnError = errors.New("surrender failed") // Renamed from PLayerSurrenderReturnError
-		
-		resp := clients.Handlers.OnPlayerSurrenderEvent(protocol.Event{ // Renamed from OnPLayerSurrenderEvent
-			Method:  "surrender",
-			Payload: utils.Dict{"user_id": "player1", "match_id": "match123", "client_id": "clientABC"},
+		clients.GameService.PlayerSurrenderReturnError = errors.New("surrender failed")
+
+		resp := clients.Handlers.OnPlayerSurrenderEvent(protocol.Event{
+			Method:		"surrender",
+			Payload:	utils.Dict{"user_id": "player1", "match_id": "match123", "client_id": "clientABC"},
 		})
 
 		if resp.Method != "surrender" {

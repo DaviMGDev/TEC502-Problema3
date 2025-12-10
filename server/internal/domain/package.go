@@ -6,12 +6,12 @@ import (
 )
 
 type Package struct {
-	ID string `json:"id"`
-	Cards utils.Map[string, *Card] `json:"cards"`
+	ID	string				`json:"id"`
+	Cards	utils.Map[string, *Card]	`json:"cards"`
 }
 
 func (pkg *Package) Unpack() (*Card, *Card, *Card, error) {
-	var ok bool 
+	var ok bool
 	var rock, paper, scissors *Card
 	rock, ok = pkg.Cards.Get("rock")
 	if !ok {
@@ -25,7 +25,5 @@ func (pkg *Package) Unpack() (*Card, *Card, *Card, error) {
 	if !ok {
 		return nil, nil, nil, errors.New("scissors card not found in package")
 	}
-	return rock, paper, scissors, nil 
+	return rock, paper, scissors, nil
 }
-
-

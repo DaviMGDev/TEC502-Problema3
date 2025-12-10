@@ -14,31 +14,25 @@ import (
 	"time"
 )
 
-// Define MQTT connection options
 var (
-	broker   = "tcp://broker.hivemq.com:1883" // HiveMQ Public Broker - Altere para o seu broker se desejar
-	clientID = "your_unique_client_id"      // <<< ALtere para um ID único para seu servidor
-	username = "your_mqtt_username"       // <<< ALtere para seu usuário MQTT, se o broker exigir (deixe vazio ou "")
-	password = "your_mqtt_password"       // <<< ALtere para sua senha MQTT, se o broker exigir (deixe vazio ou "")
+	broker		= "tcp://broker.hivemq.com:1883"
+	clientID	= "your_unique_client_id"
+	username	= "your_mqtt_username"
+	password	= "your_mqtt_password"
 )
 
 func main() {
 	log.Println("Starting Cards of Destiny Server...")
 
-	// 1. Initialize Repositories
 	userRepo := data.NewInMemoryRepository[*domain.User]()
 	matchRepo := data.NewInMemoryRepository[*domain.Match]()
-	// Package repo is implicitly handled by CardService
 
-	// 2. Create Services
 	userService := services.NewUserService(userRepo)
-	cardService := services.NewCardService(userRepo) // CardService needs userRepo
-	gameService := services.NewGameService(matchRepo, userRepo) // GameService needs matchRepo and userRepo
+	cardService := services.NewCardService(userRepo)
+	gameService := services.NewGameService(matchRepo, userRepo)
 
-	// 3. Create Handlers
 	handlersImpl := handlers.NewHandlers(userService, cardService, gameService)
 
-	// 4. Configure MQTT Client
 	opts := mqtt.NewClientOptions().AddBroker(broker).SetClientID(clientID)
 	opts.SetUsername(username)
 	opts.SetPassword(password)
@@ -48,7 +42,6 @@ func main() {
 		log.Printf("Received unhandled message: TOPIC: %s, MSG: %s\n", msg.Topic(), msg.Payload())
 	})
 
-	// Add a OnConnectHandler to automatically subscribe when connected
 	opts.SetOnConnectHandler(func(client mqtt.Client) {
 		log.Println("MQTT Client Connected")
 		mqttHandler := codmqtt.NewMQTTHandler(client, handlersImpl)
@@ -68,15 +61,12 @@ func main() {
 	}
 	log.Println("Connected to MQTT broker.")
 
-	// 5. Setup signal handling for graceful shutdown
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
-	// Block until a signal is received
 	<-c
 	log.Println("Shutting down server...")
 
-	// Disconnect MQTT client
 	if client.IsConnected() {
 		client.Disconnect(250)
 		log.Println("Disconnected from MQTT broker.")

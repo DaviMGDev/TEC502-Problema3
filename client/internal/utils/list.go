@@ -1,8 +1,6 @@
-package utils 
+package utils
 
-import (
-	// "sync"
-)
+import ()
 
 type List[T any] interface {
 	Append(item T)

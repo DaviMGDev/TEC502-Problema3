@@ -1,4 +1,4 @@
-package utils 
+package utils
 
 import (
 	"sync"
@@ -16,8 +16,8 @@ type List[T any] interface {
 }
 
 type SafeList[T comparable] struct {
-	items []T
-	mutex sync.RWMutex
+	items	[]T
+	mutex	sync.RWMutex
 }
 
 func NewSafeList[T comparable]() *SafeList[T] {
@@ -87,4 +87,4 @@ func (l *SafeList[T]) Pop() (T, bool) {
 	item := l.items[len(l.items)-1]
 	l.items = l.items[:len(l.items)-1]
 	return item, true
-}	
+}

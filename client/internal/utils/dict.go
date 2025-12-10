@@ -1,10 +1,10 @@
-package utils 
+package utils
 
 import (
 	"encoding/json"
 )
 
-type Dict map[string]any 
+type Dict map[string]any
 
 func (dict Dict) Json() ([]byte, error) {
 	return json.Marshal(dict)
@@ -17,4 +17,3 @@ func (dict Dict) String() (string, error) {
 	}
 	return string(data), nil
 }
-

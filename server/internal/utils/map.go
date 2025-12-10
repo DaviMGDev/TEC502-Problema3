@@ -15,8 +15,8 @@ type Map[K comparable, V any] interface {
 }
 
 type SafeMap[K comparable, V any] struct {
-	data  map[K]V
-	mutex sync.RWMutex
+	data	map[K]V
+	mutex	sync.RWMutex
 }
 
 func NewSafeMap[K comparable, V any]() *SafeMap[K, V] {

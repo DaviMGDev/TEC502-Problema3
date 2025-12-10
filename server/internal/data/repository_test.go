@@ -8,7 +8,6 @@ import (
 func TestInMemoryRepository(t *testing.T) {
 	repo := NewInMemoryRepository[*domain.User]()
 
-	// Test Create
 	t.Run("Create User", func(t *testing.T) {
 		user := &domain.User{ID: "user1", Username: "testuser1"}
 		err := repo.Create(user.ID, user)
@@ -20,7 +19,6 @@ func TestInMemoryRepository(t *testing.T) {
 		}
 	})
 
-	// Test Read
 	t.Run("Read User", func(t *testing.T) {
 		user, err := repo.Read("user1")
 		if err != nil {
@@ -36,7 +34,6 @@ func TestInMemoryRepository(t *testing.T) {
 		}
 	})
 
-	// Test Update
 	t.Run("Update User", func(t *testing.T) {
 		updatedUser := &domain.User{ID: "user1", Username: "updateduser"}
 		err := repo.Update("user1", updatedUser)
@@ -54,7 +51,6 @@ func TestInMemoryRepository(t *testing.T) {
 		}
 	})
 
-	// Test List
 	t.Run("List Users", func(t *testing.T) {
 		users, err := repo.List()
 		if err != nil {
@@ -65,7 +61,6 @@ func TestInMemoryRepository(t *testing.T) {
 		}
 	})
 
-	// Test Delete
 	t.Run("Delete User", func(t *testing.T) {
 		err := repo.Delete("user1")
 		if err != nil {

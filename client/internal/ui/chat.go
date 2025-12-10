@@ -9,16 +9,16 @@ import (
 )
 
 type Chat struct {
-	Outputs chan string
-	Inputs  chan string
-	Reader  *bufio.Reader
+	Outputs	chan string
+	Inputs	chan string
+	Reader	*bufio.Reader
 }
 
 func NewChat() *Chat {
 	return &Chat{
-		Outputs: make(chan string, 10),
-		Inputs:  make(chan string, 1),
-		Reader:  bufio.NewReader(os.Stdin),
+		Outputs:	make(chan string, 10),
+		Inputs:		make(chan string, 1),
+		Reader:		bufio.NewReader(os.Stdin),
 	}
 }
 

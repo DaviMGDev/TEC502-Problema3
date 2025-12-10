@@ -8,21 +8,18 @@ import (
 	"testing"
 )
 
-// --- GameService Tests ---
-
 func TestGameService_StartGame(t *testing.T) {
 	gameRepo := data.NewInMemoryRepository[*domain.Match]()
 	userRepo := data.NewInMemoryRepository[*domain.User]()
-	// Use a fresh service for this test suite
+
 	gameService := NewGameService(gameRepo, userRepo)
 
-	// Pre-populate users
 	userRepo.Create("p1", &domain.User{ID: "p1", Username: "player1", Cards: utils.NewSafeMap[string, *domain.Card]()})
 	userRepo.Create("p2", &domain.User{ID: "p2", Username: "player2", Cards: utils.NewSafeMap[string, *domain.Card]()})
 
 	t.Run("First player queues up", func(t *testing.T) {
 		log.Printf("Running TestGameService_StartGame: First player queues up")
-		
+
 		match, err := gameService.StartGame("p1")
 		if err != nil {
 			t.Fatalf("Expected no error for first player, got %v", err)
@@ -31,13 +28,10 @@ func TestGameService_StartGame(t *testing.T) {
 			t.Fatalf("Expected a nil match for the first player, got %+v", match)
 		}
 
-		// Check that the queue now has one item
 		if len(gameService.queue) != 1 {
 			t.Errorf("Expected queue length to be 1, got %d", len(gameService.queue))
 		}
-		
-		// Check that a match was created in the repo
-		// We can't know the ID, but there should be only one
+
 		allMatches, _ := gameRepo.List()
 		if len(allMatches) != 1 {
 			t.Fatalf("Expected 1 match to be created in the repo, found %d", len(allMatches))
@@ -53,9 +47,6 @@ func TestGameService_StartGame(t *testing.T) {
 
 	t.Run("Second player forms a match", func(t *testing.T) {
 		log.Printf("Running TestGameService_StartGame: Second player forms a match")
-		// This test depends on the state of the previous one, which is not ideal,
-		// but for this flow it's the simplest way. A better way would be to reset state each time.
-		// Let's assume the first player is already in the queue.
 
 		formedMatch, err := gameService.StartGame("p2")
 		if err != nil {
@@ -65,7 +56,6 @@ func TestGameService_StartGame(t *testing.T) {
 			t.Fatal("Expected a non-nil match to be formed for the second player")
 		}
 
-		// Check that the queue is now empty
 		if len(gameService.queue) != 0 {
 			t.Errorf("Expected queue to be empty after match formation, but length is %d", len(gameService.queue))
 		}
@@ -74,7 +64,6 @@ func TestGameService_StartGame(t *testing.T) {
 			t.Errorf("Expected formed match to have players p1 and p2, got %v", formedMatch.Players)
 		}
 
-		// Check that the match in the repo was updated
 		updatedMatch, err := gameRepo.Read(formedMatch.ID)
 		if err != nil {
 			t.Fatalf("Could not read updated match from repo: %v", err)
@@ -87,13 +76,12 @@ func TestGameService_StartGame(t *testing.T) {
 }
 
 func TestGameService_MakeMove(t *testing.T) {
-	// Setup function to create a fresh state for each sub-test
+
 	setup := func() (*GameServiceImplementation, data.Repository[*domain.Match], data.Repository[*domain.User]) {
 		gameRepo := data.NewInMemoryRepository[*domain.Match]()
 		userRepo := data.NewInMemoryRepository[*domain.User]()
 		gameService := NewGameService(gameRepo, userRepo)
 
-		// Create users and cards
 		user1 := &domain.User{ID: "p1", Username: "player1", Cards: utils.NewSafeMap[string, *domain.Card]()}
 		user1.Cards.Set("rock1", &domain.Card{ID: "rock1", Type: domain.Rock, Level: 5})
 		user1.Cards.Set("paper1", &domain.Card{ID: "paper1", Type: domain.Paper, Level: 5})
@@ -104,7 +92,6 @@ func TestGameService_MakeMove(t *testing.T) {
 		user2.Cards.Set("scissors2", &domain.Card{ID: "scissors2", Type: domain.Scissors, Level: 5})
 		userRepo.Create("p2", user2)
 
-		// Create a match
 		gameRepo.Create("match1", &domain.Match{ID: "match1", Players: [2]string{"p1", "p2"}, Moves: [2]*domain.Card{}})
 
 		return gameService, gameRepo, userRepo
@@ -136,8 +123,8 @@ func TestGameService_MakeMove(t *testing.T) {
 		gameService, gameRepo, _ := setup()
 		log.Printf("Running TestGameService_MakeMove: Second move determines winner")
 
-		gameService.MakeMove("match1", "p1", "rock1") // p1 plays rock
-		err := gameService.MakeMove("match1", "p2", "scissors2") // p2 plays scissors
+		gameService.MakeMove("match1", "p1", "rock1")
+		err := gameService.MakeMove("match1", "p2", "scissors2")
 		if err != nil {
 			t.Fatalf("Expected no error on second move, got %v", err)
 		}
@@ -148,7 +135,7 @@ func TestGameService_MakeMove(t *testing.T) {
 		}
 		log.Printf("TestGameService_MakeMove 'Second move determines winner' passed.")
 	})
-	
+
 	t.Run("Second move determines draw", func(t *testing.T) {
 		gameService, gameRepo, _ := setup()
 		log.Printf("Running TestGameService_MakeMove: Second move determines draw")
@@ -169,7 +156,7 @@ func TestGameService_MakeMove(t *testing.T) {
 	t.Run("Make Move on concluded match", func(t *testing.T) {
 		gameService, gameRepo, _ := setup()
 		log.Printf("Running TestGameService_MakeMove: Make Move on concluded match")
-		
+
 		match, _ := gameRepo.Read("match1")
 		match.Winner = "p1"
 		gameRepo.Update("match1", match)
@@ -234,7 +221,7 @@ func TestGameService_PlayerSurrender(t *testing.T) {
 
 	t.Run("Successful Player Surrender", func(t *testing.T) {
 		log.Printf("Running TestGameService_PlayerSurrender: Successful Player Surrender")
-		err := gameService.PLayerSurrender(matchID, player1ID) // Note the typo in PLayerSurrender
+		err := gameService.PLayerSurrender(matchID, player1ID)
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
 		}

@@ -10,10 +10,10 @@ import (
 
 func TestParseCommand(t *testing.T) {
 	tests := []struct {
-		name       string
-		input      string
-		expCommand string
-		expArgs    []string
+		name		string
+		input		string
+		expCommand	string
+		expArgs		[]string
 	}{
 		{"Empty string", "", "", []string{}},
 		{"Chat message", "hello world", "chat", []string{"hello world"}},
@@ -21,7 +21,7 @@ func TestParseCommand(t *testing.T) {
 		{"Command with multiple args", "/move card1 pos2", "move", []string{"card1", "pos2"}},
 		{"Command with no args", "/status", "status", []string{}},
 		{"Command with mixed case", "/LOGIN user pass", "login", []string{"user", "pass"}},
-		{"Command with leading/trailing spaces", " /command arg ", "chat", []string{" /command arg "}}, // Should be treated as chat if not starting with '/'
+		{"Command with leading/trailing spaces", " /command arg ", "chat", []string{" /command arg "}},
 	}
 
 	for _, tt := range tests {
@@ -42,7 +42,6 @@ func TestParseCommand(t *testing.T) {
 func TestSafeMap(t *testing.T) {
 	m := NewSafeMap[string, int]()
 
-	// Test Set and Get
 	t.Run("Set and Get", func(t *testing.T) {
 		log.Printf("Running TestSafeMap: Set and Get")
 		m.Set("key1", 100)
@@ -53,7 +52,6 @@ func TestSafeMap(t *testing.T) {
 		log.Printf("TestSafeMap 'Set and Get' passed.")
 	})
 
-	// Test Has
 	t.Run("Has", func(t *testing.T) {
 		log.Printf("Running TestSafeMap: Has")
 		if !m.Has("key1") {
@@ -65,7 +63,6 @@ func TestSafeMap(t *testing.T) {
 		log.Printf("TestSafeMap 'Has' passed.")
 	})
 
-	// Test Delete
 	t.Run("Delete", func(t *testing.T) {
 		log.Printf("Running TestSafeMap: Delete")
 		m.Delete("key1")
@@ -76,10 +73,9 @@ func TestSafeMap(t *testing.T) {
 		log.Printf("TestSafeMap 'Delete' passed.")
 	})
 
-	// Test Concurrency
 	t.Run("Concurrency", func(t *testing.T) {
 		log.Printf("Running TestSafeMap: Concurrency")
-		m_concurrency := NewSafeMap[int, int]() // Reset map
+		m_concurrency := NewSafeMap[int, int]()
 		var wg sync.WaitGroup
 		numWorkers := 100
 		numOperations := 1000
@@ -92,7 +88,7 @@ func TestSafeMap(t *testing.T) {
 					key := workerID*numOperations + j
 					m_concurrency.Set(key, key*2)
 					_, _ = m_concurrency.Get(key)
-					if j%10 == 0 { // Delete some keys intermittently
+					if j%10 == 0 {
 						m_concurrency.Delete(key)
 					}
 				}
@@ -100,12 +96,10 @@ func TestSafeMap(t *testing.T) {
 		}
 		wg.Wait()
 
-		// Verify no panics or deadlocks, simple check of size
 		log.Printf("Final SafeMap size: %d", len(m_concurrency.Keys()))
 		log.Printf("TestSafeMap 'Concurrency' passed.")
 	})
 
-	// Test NewSafeMapFromMap
 	t.Run("NewSafeMapFromMap", func(t *testing.T) {
 		log.Printf("Running TestSafeMap: NewSafeMapFromMap")
 		initial := map[string]int{"a": 1, "b": 2}
@@ -121,7 +115,6 @@ func TestSafeMap(t *testing.T) {
 		log.Printf("TestSafeMap 'NewSafeMapFromMap' passed.")
 	})
 
-	// Test Keys and Values
 	t.Run("Keys and Values", func(t *testing.T) {
 		log.Printf("Running TestSafeMap: Keys and Values")
 		m = NewSafeMap[string, int]()
@@ -144,7 +137,6 @@ func TestSafeMap(t *testing.T) {
 func TestSafeList(t *testing.T) {
 	l := NewSafeList[string]()
 
-	// Test Append
 	t.Run("Append", func(t *testing.T) {
 		log.Printf("Running TestSafeList: Append")
 		l.Append("item1")
@@ -159,7 +151,6 @@ func TestSafeList(t *testing.T) {
 		log.Printf("TestSafeList 'Append' passed.")
 	})
 
-	// Test Contains
 	t.Run("Contains", func(t *testing.T) {
 		log.Printf("Running TestSafeList: Contains")
 		if !l.Contains("item1") {
@@ -171,7 +162,6 @@ func TestSafeList(t *testing.T) {
 		log.Printf("TestSafeList 'Contains' passed.")
 	})
 
-	// Test Remove
 	t.Run("Remove", func(t *testing.T) {
 		log.Printf("Running TestSafeList: Remove")
 		if !l.Remove("item1") {
@@ -186,7 +176,6 @@ func TestSafeList(t *testing.T) {
 		log.Printf("TestSafeList 'Remove' passed.")
 	})
 
-	// Test Pop
 	t.Run("Pop", func(t *testing.T) {
 		log.Printf("Running TestSafeList: Pop")
 		l.Append("item3")
@@ -200,7 +189,6 @@ func TestSafeList(t *testing.T) {
 		log.Printf("TestSafeList 'Pop' passed.")
 	})
 
-	// Test Get out of bounds
 	t.Run("Get out of bounds", func(t *testing.T) {
 		log.Printf("Running TestSafeList: Get out of bounds")
 		_, ok := l.Get(10)
@@ -210,7 +198,6 @@ func TestSafeList(t *testing.T) {
 		log.Printf("TestSafeList 'Get out of bounds' passed.")
 	})
 
-	// Test Search
 	t.Run("Search", func(t *testing.T) {
 		log.Printf("Running TestSafeList: Search")
 		l = NewSafeList[string]()
@@ -226,10 +213,9 @@ func TestSafeList(t *testing.T) {
 		log.Printf("TestSafeList 'Search' passed.")
 	})
 
-	// Test Concurrency
 	t.Run("Concurrency", func(t *testing.T) {
 		log.Printf("Running TestSafeList: Concurrency")
-		l_concurrency := NewSafeList[int]() // Reset list
+		l_concurrency := NewSafeList[int]()
 		var wg sync.WaitGroup
 		numWorkers := 100
 		numOperations := 1000
@@ -241,8 +227,8 @@ func TestSafeList(t *testing.T) {
 				for j := 0; j < numOperations; j++ {
 					item := workerID*numOperations + j
 					l_concurrency.Append(item)
-					_, _ = l_concurrency.Get(0) // Read from list
-					if j%10 == 0 {              // Remove some items intermittently
+					_, _ = l_concurrency.Get(0)
+					if j%10 == 0 {
 						l_concurrency.Remove(item)
 					}
 				}
@@ -250,7 +236,7 @@ func TestSafeList(t *testing.T) {
 		}
 		wg.Wait()
 		log.Printf("Final SafeList size: %d", l_concurrency.Size())
-		// Basic check, size should be less than total operations due to removals
+
 		if l_concurrency.Size() > numWorkers*numOperations {
 			t.Errorf("List size %d is unexpectedly large", l_concurrency.Size())
 		}
@@ -259,7 +245,7 @@ func TestSafeList(t *testing.T) {
 }
 
 func TestDict(t *testing.T) {
-	// Test Json
+
 	t.Run("Json conversion", func(t *testing.T) {
 		log.Printf("Running TestDict: Json conversion")
 		d := make(Dict)
@@ -269,17 +255,16 @@ func TestDict(t *testing.T) {
 		if err != nil {
 			t.Errorf("Error marshalling to JSON: %v", err)
 		}
-		expected := `{"name":"test","value":123}` // Order of keys is not guaranteed in maps, so this might fail.
-		// A more robust check would be to unmarshal and compare maps.
+		expected := `{"name":"test","value":123}`
+
 		var result map[string]interface{}
 		json.Unmarshal(jsonBytes, &result)
-		if result["name"] != "test" || result["value"].(float64) != 123 { // JSON numbers are float64
+		if result["name"] != "test" || result["value"].(float64) != 123 {
 			t.Errorf("Expected JSON %s, got %s", expected, string(jsonBytes))
 		}
 		log.Printf("TestDict 'Json conversion' passed.")
 	})
 
-	// Test String
 	t.Run("String conversion", func(t *testing.T) {
 		log.Printf("Running TestDict: String conversion")
 		d := make(Dict)
@@ -288,7 +273,7 @@ func TestDict(t *testing.T) {
 		if err != nil {
 			t.Errorf("Error converting to string: %v", err)
 		}
-		// Similar to Json, order isn't guaranteed.
+
 		var result map[string]interface{}
 		json.Unmarshal([]byte(str), &result)
 		if result["key"] != "val" {
@@ -299,24 +284,20 @@ func TestDict(t *testing.T) {
 }
 
 func TestMux(t *testing.T) {
-	// Define a simple function type for the mux
+
 	type testFunc func(string) string
 
-	// Create a new SafeMap for Mux's underlying map
 	safeMap := NewSafeMap[string, testFunc]()
 
-	// Create a Mux instance
 	defaultHandler := func(s string) string { return "default:" + s }
 	mux := &Mux[testFunc]{
-		Map:       safeMap,
-		defaultFn: defaultHandler,
+		Map:		safeMap,
+		defaultFn:	defaultHandler,
 	}
 
-	// Define some handlers
 	handler1 := func(s string) string { return "handler1:" + s }
 	handler2 := func(s string) string { return "handler2:" + s }
 
-	// Set handlers in the underlying SafeMap
 	safeMap.Set("cmd1", handler1)
 	safeMap.Set("cmd2", handler2)
 
@@ -332,7 +313,7 @@ func TestMux(t *testing.T) {
 	t.Run("Get non-existing handler", func(t *testing.T) {
 		log.Printf("Running TestMux: Get non-existing handler")
 		fn, ok := mux.Get("cmd3")
-		if ok || fn("test") != "default:test" { // Should return default function and ok=false
+		if ok || fn("test") != "default:test" {
 			t.Errorf("Expected default handler for cmd3, got %v, %v", fn("test"), ok)
 		}
 		log.Printf("TestMux 'Get non-existing handler' passed.")
@@ -340,7 +321,7 @@ func TestMux(t *testing.T) {
 
 	t.Run("Verify default function behavior when no specific handler", func(t *testing.T) {
 		log.Printf("Running TestMux: Verify default function behavior")
-		safeMap.Delete("cmd1") // Remove cmd1 to ensure default is still returned if not found
+		safeMap.Delete("cmd1")
 		fn, ok := mux.Get("cmd1")
 		if ok || fn("another_test") != "default:another_test" {
 			t.Errorf("Expected default handler after deletion, got %v, %v", fn("another_test"), ok)

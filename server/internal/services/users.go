@@ -14,8 +14,8 @@ type UserService interface {
 }
 
 type UserServiceImplementation struct {
-	userRepo    data.Repository[*domain.User]
-	userCounter uint64
+	userRepo	data.Repository[*domain.User]
+	userCounter	uint64
 }
 
 func NewUserService(userRepo data.Repository[*domain.User]) *UserServiceImplementation {
@@ -25,24 +25,20 @@ func NewUserService(userRepo data.Repository[*domain.User]) *UserServiceImplemen
 }
 
 func (s *UserServiceImplementation) Register(username, password string) (*domain.User, error) {
-	// In a real system, we'd check if the username is already taken.
-	// The repository's Create method already handles this, so we rely on its error.
-	
-	// The key for the user in the repository is the username, but the user object also has a separate ID.
-	// This is a bit inconsistent. Let's assume for now the repository is keyed by username.
+
 	id := strconv.FormatUint(s.userCounter, 10)
 	user := &domain.User{
-		ID:       id,
-		Username: username,
-		Password: password,
-		Cards:    utils.NewSafeMap[string, *domain.Card](),
+		ID:		id,
+		Username:	username,
+		Password:	password,
+		Cards:		utils.NewSafeMap[string, *domain.Card](),
 	}
-	
+
 	err := s.userRepo.Create(username, user)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	s.userCounter++
 	return user, nil
 }
@@ -55,5 +51,5 @@ func (s *UserServiceImplementation) Login(username, password string) (string, er
 	if user.Password != password {
 		return "", errors.New("invalid credentials")
 	}
-	return user.ID, nil 
+	return user.ID, nil
 }

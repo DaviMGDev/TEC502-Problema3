@@ -8,14 +8,12 @@ import (
 	"testing"
 )
 
-// --- UserService Tests ---
-
 func TestUserService_Register(t *testing.T) {
 	t.Run("Successful Registration", func(t *testing.T) {
 		log.Printf("Running TestUserService_Register: Successful Registration")
 		userRepo := data.NewInMemoryRepository[*domain.User]()
 		userService := NewUserService(userRepo)
-		
+
 		createdUser, err := userService.Register("testuser", "testpass")
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
@@ -26,7 +24,7 @@ func TestUserService_Register(t *testing.T) {
 		if createdUser.Username != "testuser" {
 			t.Errorf("Expected created user to have username 'testuser', got '%s'", createdUser.Username)
 		}
-		
+
 		user, err := userRepo.Read("testuser")
 		if err != nil {
 			t.Fatalf("Expected user to be created in repo, got error %v", err)
@@ -41,14 +39,12 @@ func TestUserService_Register(t *testing.T) {
 		log.Printf("Running TestUserService_Register: Register existing user")
 		userRepo := data.NewInMemoryRepository[*domain.User]()
 		userService := NewUserService(userRepo)
-		
-		// First registration should succeed
+
 		_, err1 := userService.Register("testuser", "pass1")
 		if err1 != nil {
 			t.Fatalf("First registration failed unexpectedly: %v", err1)
 		}
-		
-		// Second registration should fail
+
 		_, err2 := userService.Register("testuser", "pass2")
 		if err2 == nil {
 			t.Fatalf("Expected error for existing user, got none")
@@ -61,7 +57,6 @@ func TestUserService_Login(t *testing.T) {
 	mockRepo := data.NewInMemoryRepository[*domain.User]()
 	userService := NewUserService(mockRepo)
 
-	// Pre-register a user
 	_, _ = userService.Register("loginuser", "loginpass")
 
 	t.Run("Successful Login", func(t *testing.T) {
@@ -98,18 +93,16 @@ func TestUserService_Login(t *testing.T) {
 	})
 }
 
-// --- CardService Tests ---
-
 func TestCardService_BuyCardPack(t *testing.T) {
 	mockRepo := data.NewInMemoryRepository[*domain.User]()
 	userService := NewUserService(mockRepo)
 	_, _ = userService.Register("buyeruser", "pass")
 
 	t.Run("Successful Buy Card Pack", func(t *testing.T) {
-		// NewCardService now correctly initializes and stocks the packages list.
+
 		cardService := NewCardService(mockRepo)
 		log.Printf("Running TestCardService_BuyCardPack: Successful Buy Card Pack")
-		
+
 		initialPackCount := cardService.packages.Size()
 		if initialPackCount == 0 {
 			t.Fatalf("Expected initial packages to be stocked, but count is 0")
@@ -124,7 +117,7 @@ func TestCardService_BuyCardPack(t *testing.T) {
 			t.Errorf("Expected package count to decrease by 1, got %d", cardService.packages.Size())
 		}
 		user, _ := mockRepo.Read("buyeruser")
-		if user.Cards.Size() != 3 { // Rock, Paper, Scissors
+		if user.Cards.Size() != 3 {
 			t.Errorf("Expected user to have 3 cards, got %d", user.Cards.Size())
 		}
 		log.Printf("TestCardService_BuyCardPack 'Successful Buy Card Pack' passed.")
@@ -143,15 +136,14 @@ func TestCardService_BuyCardPack(t *testing.T) {
 	t.Run("checkStock replenishes packages", func(t *testing.T) {
 		log.Printf("Running TestCardService_BuyCardPack: checkStock replenishes packages")
 		cardService := NewCardService(mockRepo)
-		
-		// Manually drain the list to test replenishment logic in isolation
+
 		for cardService.packages.Size() > 0 {
 			cardService.packages.Pop()
 		}
-		// Add one package back to be able to Pop it
+
 		cardService.packages.Append(&domain.Package{
-			ID:    "last_pack",
-			Cards: utils.NewSafeMap[string, *domain.Card](),
+			ID:	"last_pack",
+			Cards:	utils.NewSafeMap[string, *domain.Card](),
 		})
 
 		if cardService.packages.Size() != 1 {
@@ -221,7 +213,7 @@ func TestCardService_Trade(t *testing.T) {
 	t.Run("Trade Card type not owned", func(t *testing.T) {
 		log.Printf("Running TestCardService_Trade: Trade Card type not owned")
 		err := cardService.Trade("userA", "userB", domain.Scissors)
-		if err == nil { // Changed from err != nil to err == nil because the service now returns an error
+		if err == nil {
 			t.Fatalf("Expected error when card type not owned, got none")
 		}
 		log.Printf("TestCardService_Trade 'Trade Card type not owned' passed.")

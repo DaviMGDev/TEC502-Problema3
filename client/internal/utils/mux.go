@@ -1,16 +1,14 @@
 package utils
 
-import (
-	// "sync"
-)
+import ()
 
 type Mux[fn any] struct {
 	Map[string, fn]
-	defaultFn fn
+	defaultFn	fn
 }
 
 func (m *Mux[fn]) Get(key string) (fn, bool) {
-	if !m.Has(key){
+	if !m.Has(key) {
 		return m.defaultFn, false
 	}
 	return m.Map.Get(key)

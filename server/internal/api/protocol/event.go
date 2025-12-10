@@ -1,4 +1,4 @@
-package protocol 
+package protocol
 
 import (
 	"time"
@@ -6,7 +6,7 @@ import (
 )
 
 type Event struct {
-	Method string      `json:"method"` 
-	Timestamp time.Time `json:"timestamp"`
-	Payload utils.Dict `json:"payload"`
+	Method		string		`json:"method"`
+	Timestamp	time.Time	`json:"timestamp"`
+	Payload		utils.Dict	`json:"payload"`
 }

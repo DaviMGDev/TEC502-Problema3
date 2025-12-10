@@ -1,4 +1,4 @@
-package utils 
+package utils
 
 import (
 	"strings"
@@ -8,8 +8,8 @@ func ParseCommand(input string) (string, []string) {
 	if input == "" {
 		return "", []string{}
 	}
-	var command string 
-	var parts, args []string 
+	var command string
+	var parts, args []string
 	if input[0] != '/' {
 		return "chat", []string{input}
 	}

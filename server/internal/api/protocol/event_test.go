@@ -13,9 +13,9 @@ func TestEventCreation(t *testing.T) {
 	payload := utils.Dict{"key": "value", "number": 123}
 
 	event := Event{
-		Method:    method,
-		Timestamp: timestamp,
-		Payload:   payload,
+		Method:		method,
+		Timestamp:	timestamp,
+		Payload:	payload,
 	}
 
 	if event.Method != method {

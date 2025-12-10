@@ -4,27 +4,27 @@ import (
 	"cod-server/internal/data"
 	"cod-server/internal/domain"
 	"cod-server/internal/utils"
-	"errors" // Added this import
+	"errors"
 	"math/rand"
 	"strconv"
 )
 
 type CardService interface {
-	BuyCardPack(userID string) error 
-	Trade(user1, user2, cardType string) error 
+	BuyCardPack(userID string) error
+	Trade(user1, user2, cardType string) error
 	ListUserCards(userID string) ([]*domain.Card, error)
 }
 
 type CardServiceImplementation struct {
-	userRepo data.Repository[*domain.User]
-	packages utils.List[*domain.Package]
-	packCounter uint64
+	userRepo	data.Repository[*domain.User]
+	packages	utils.List[*domain.Package]
+	packCounter	uint64
 }
 
 func NewCardService(userRepo data.Repository[*domain.User]) *CardServiceImplementation {
 	service := &CardServiceImplementation{
-		userRepo: userRepo,
-		packages: utils.NewSafeList[*domain.Package](),
+		userRepo:	userRepo,
+		packages:	utils.NewSafeList[*domain.Package](),
 	}
 	service.checkStock()
 	return service
@@ -34,17 +34,17 @@ func (s *CardServiceImplementation) checkStock() {
 	if s.packages.Size() < 16 {
 		for i := 0; i < 64; i++ {
 			pack := domain.Package{
-				ID: strconv.FormatUint(s.packCounter, 16),
-				Cards: utils.NewSafeMap[string, *domain.Card](),
+				ID:	strconv.FormatUint(s.packCounter, 16),
+				Cards:	utils.NewSafeMap[string, *domain.Card](),
 			}
 			s.packCounter++
 			types := []string{"rock", "paper", "scissors"}
 			level := (rand.Int63() % 100) + 1
-			for _, t := range types {	
+			for _, t := range types {
 				card := &domain.Card{
-					ID: strconv.FormatUint(rand.Uint64(), 10), // Changed to base 10 for consistency
-					Type: t,
-					Level: level,
+					ID:	strconv.FormatUint(rand.Uint64(), 10),
+					Type:	t,
+					Level:	level,
 				}
 				pack.Cards.Set(t, card)
 			}
@@ -61,7 +61,7 @@ func (s *CardServiceImplementation) BuyCardPack(userID string) error {
 	}
 	pack, ok := s.packages.Pop()
 	if !ok {
-		return nil 
+		return nil
 	}
 	for _, card := range pack.Cards.Values() {
 		user.Cards.Set(card.Type, card)
@@ -72,24 +72,24 @@ func (s *CardServiceImplementation) BuyCardPack(userID string) error {
 func (s *CardServiceImplementation) Trade(user1, user2, cardType string) error {
 	first, err := s.userRepo.Read(user1)
 	if err != nil {
-		return err 
+		return err
 	}
 	second, err := s.userRepo.Read(user2)
 	if err != nil {
-		return err 
+		return err
 	}
 	card1, ok1 := first.Cards.Get(cardType)
 	card2, ok2 := second.Cards.Get(cardType)
 	if !ok1 || !ok2 {
-		return errors.New("one or both users do not have the specified card type") 
+		return errors.New("one or both users do not have the specified card type")
 	}
 	first.Cards.Set(cardType, card2)
 	second.Cards.Set(cardType, card1)
 	if err := s.userRepo.Update(user1, first); err != nil {
-		return err 
+		return err
 	}
 	if err := s.userRepo.Update(user2, second); err != nil {
-		return err 
+		return err
 	}
 	return nil
 }
@@ -97,7 +97,7 @@ func (s *CardServiceImplementation) Trade(user1, user2, cardType string) error {
 func (s *CardServiceImplementation) ListUserCards(userID string) ([]*domain.Card, error) {
 	user, err := s.userRepo.Read(userID)
 	if err != nil {
-		return nil, err 
+		return nil, err
 	}
-	return user.Cards.Values(), nil 
+	return user.Cards.Values(), nil
 }

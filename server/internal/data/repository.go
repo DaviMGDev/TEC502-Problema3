@@ -60,4 +60,4 @@ func (repo *InMemoryRepository[T]) Delete(id string) error {
 
 func (repo *InMemoryRepository[T]) List() ([]T, error) {
 	return repo.entities.Values(), nil
-}	
+}

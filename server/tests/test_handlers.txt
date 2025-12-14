@@ -1,4 +1,0 @@
-# cod-server/internal/handlers
-internal/handlers/generic_handlers_test.go:307:1: expected declaration, found '}'
-FAIL	cod-server/internal/handlers [setup failed]
-FAIL

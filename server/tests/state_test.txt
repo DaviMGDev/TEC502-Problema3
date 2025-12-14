@@ -1,4 +1,0 @@
-=== RUN   TestNewState
---- PASS: TestNewState (0.00s)
-PASS
-ok  	cod-server/internal/state	(cached)
